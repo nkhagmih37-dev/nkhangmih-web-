@@ -1,0 +1,54 @@
+@import url("/general-styles/header.css");
+@import url("/general-styles/interact.css");
+@import url("/general-styles/ran-pic.css");
+
+@keyframes slideUpBlur {
+  from {
+    opacity: 0;
+    filter: blur(1.5px);           
+    transform: translateY(25px);  
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 0;
+  color: white;
+  margin-bottom: 20px;
+}
+
+body > *:not(.pic){
+  opacity: 0;
+  transform: translateY(1rem);
+  will-change: transform, opacity, filter;
+  animation: slideUpBlur 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+body {
+  background-color: #181514;
+  margin: 0;
+  padding-top: 70px;
+  padding-bottom: 250px;
+}
+
+html,
+body {
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  width: 100%;
+  position: relative;
+}
+
+.poem {
+  color: aliceblue;
+  display: grid;
+  align-items: bottom;
+  justify-self: center;
+  margin-top: 200px;
+}

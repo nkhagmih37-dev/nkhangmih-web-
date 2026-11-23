@@ -1,0 +1,42 @@
+/* .knot:hover {
+    filter: drop-shadow(0 0 8px rgba(250, 252, 152, 0.3))
+            drop-shadow(0 0 5px rgba(250, 252, 152, 0.491));
+    transform: scale(1.05);
+}
+
+.atlas:hover {
+    filter: drop-shadow(0 0 6px rgba(253, 255, 231, 0.8))
+            drop-shadow(0 0 3px rgba(248, 249, 237, 0.4));
+    transform: scale(1.05);
+}
+
+.link:hover {
+    filter: drop-shadow(0 0 6px rgba(253, 255, 231, 0.8))
+            drop-shadow(0 0 3px rgba(248, 249, 237, 0.4));
+    transform: scale(1.05);
+}
+
+.img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.img-container .tooltip {
+    position: absolute;
+    background-color: rgba(22, 25, 29);
+    color: rgb(243, 237, 237);
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 15px;
+    bottom: -40px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+}
+
+.img-container:hover .tooltip {
+    opacity: 1;
+} */

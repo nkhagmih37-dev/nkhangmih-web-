@@ -1,0 +1,340 @@
+/* .header {
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    justify-content: center;
+    border-bottom: 1px solid rgba(56, 56, 56);
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+
+    z-index: 1000;
+}
+
+.left-section {
+    margin-left: 19px;
+    width: 300px;
+    display: flex;
+    align-items: center;
+}
+
+.search-button {
+    height: 55px;
+    width: 55px;
+    border: none;
+    background-color: rgba(31, 29, 29);
+    border-radius: 20px;
+}
+
+.search-icon {
+    height: 40px;
+    width: 40px;
+}
+
+.middle-section {
+    flex: 1;
+    max-width: 50%;
+    display: flex;
+    justify-content: center;
+}
+
+.knot {
+    height: 67px;
+    width: 67px;
+    filter: drop-shadow(0 0 5.6px rgba(253, 255, 231, 0.37));
+}
+
+.right-section {
+    margin-right: 19px;
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.atlas {
+    height: 31px;
+    width: 31px;
+    cursor: pointer;
+    transition: all 0.3 ease;
+}
+
+.link {
+    height: 31px;
+    width: 31px;
+    cursor: pointer;
+    transition: all 0.3 ease;
+}
+
+
+.user-picture {
+    height: 37px;
+    border-radius: 31px;
+    cursor: pointer;
+} */
+
+/* =========================================================
+   1. KHUNG HEADER CHUNG
+   ========================================================= */
+.header {
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgb(56, 56, 56);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  background-color: rgba(24, 21, 20, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  z-index: 1000;
+}
+
+.left-section {
+  margin-left: 19px;
+  width: 300px;
+  display: flex;
+  align-items: center;
+}
+
+.middle-section {
+  flex: 1;
+  max-width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.right-section {
+  margin-right: 19px;
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* =========================================================
+   2. KHUNG BAO ICON (.img-container) - HIỆN KHUNG KHI HOVER
+   ========================================================= */
+.img-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+
+  /* Chuyển đổi mượt khi hiện khung */
+  transition: background-color 0.25s ease,
+              border-color 0.25s ease,
+              box-shadow 0.25s ease,
+              transform 0.2s ease;
+}
+
+/* Khi đưa chuột vào: Hiện khung nền tối mờ + viền sáng mảnh */
+.img-container:hover {
+  background-color: rgba(245, 241, 241, 0.06);
+  border-color: rgba(249, 252, 216, 0.22);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+}
+
+/* Hiệu ứng lún nhẹ xuống khi bấm chuột (Click) */
+.img-container:active {
+  transform: scale(0.92);
+}
+
+/* Riêng khung của logo Knot ở giữa lớn hơn nên để nền thoáng */
+.knot-container {
+  width: 64px;
+  height: 64px;
+  border-radius: 30%;
+}
+.knot-container:hover {
+  background-color: rgba(137, 138, 95, 0.05);
+  border-color: rgba(187, 188, 131, 0.25);
+}
+
+/* =========================================================
+   3. HIỆU ỨNG XOAY & PHÁT SÁNG TỪNG ICON
+   ========================================================= */
+
+/* --- 3.1. Nút Search góc trái --- */
+.search-button {
+  height: 52px;
+  width: 52px;
+  border: 1px solid transparent;
+  background-color: rgb(31, 29, 29);
+  border-radius: 16px;
+}
+
+.search-icon {
+  height: 28px;
+  width: 28px;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              filter 0.3s ease;
+}
+
+/* Hover kính lúp: Xoay nghiêng 15 độ + phóng nhẹ + phát sáng */
+.search-button:hover .search-icon {
+  transform: scale(1.14) rotate(-15deg);
+  filter: drop-shadow(0 0 6px rgba(253, 255, 231, 0.7));
+}
+
+/* --- 3.2. Logo Trái tim bện (.knot) ở giữa --- */
+.knot {
+  height: 53px;
+  width: 53px;
+  filter: drop-shadow(0 0 5.6px rgba(253, 255, 231, 0.37));
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+              filter 0.3s ease;
+}
+
+.img-container:hover .knot {
+  filter: drop-shadow(0 0 10px rgba(250, 252, 152, 0.45))
+          drop-shadow(0 0 6px rgba(140, 233, 154, 0.6));
+  transform: scale(1.08) rotate(5deg);
+}
+
+/* --- 3.3. Icon Sổ tay con mắt (.atlas) --- */
+.atlas {
+  height: 25px;
+  width: 25px;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              filter 0.3s ease;
+}
+
+/* Hover atlas: Nảy lên và xoay nghiêng nhẹ -8 độ */
+.img-container:hover .atlas {
+  filter: drop-shadow(0 0 6px rgba(253, 255, 231, 0.85))
+          drop-shadow(0 0 3px rgba(248, 249, 237, 0.4));
+  transform: translateY(-2px) scale(1.12) rotate(-8deg);
+}
+
+/* --- 3.4. Icon Kết nối (.link) --- */
+.link {
+  height: 25px;
+  width: 25px;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              filter 0.3s ease;
+}
+
+/* Hover link: Phóng to và xoay nhẹ +8 độ */
+.img-container:hover .link {
+  filter: drop-shadow(0 0 6px rgba(253, 255, 231, 0.85))
+          drop-shadow(0 0 3px rgba(248, 249, 237, 0.4));
+  transform: translateY(-2px) scale(1.12) rotate(8deg);
+}
+
+/* --- 3.5. Ảnh đại diện (.user-picture) + Vòng la bàn xoay --- */
+.user-picture {
+  height: 35px;
+  width: 35px;
+  object-fit: cover;
+  border-radius: 50%;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              filter 0.3s ease;
+}
+
+/* Tạo vòng tròn nét đứt ẩn quanh Avatar */
+.user-container {
+  border-radius: 50%;
+}
+
+.user-container::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(253, 255, 231, 0);
+  pointer-events: none;
+  transition: transform 0.65s ease, border-color 0.3s ease, inset 0.3s ease;
+}
+
+/* Khi hover vào Avatar: Ảnh xoay nhẹ + Vòng nét đứt hiện ra và quay 120 độ */
+.user-container:hover .user-picture {
+  transform: scale(1.08) rotate(10deg);
+  filter: drop-shadow(0 0 6px rgba(253, 255, 231, 0.5));
+}
+
+.user-container:hover::after {
+  inset: -2px;
+  border-color: rgba(253, 255, 231, 0.65);
+  transform: rotate(120deg);
+}
+
+/* =========================================================
+   4. HỘP TOOLTIP HIỆN RA KÈM MŨI TÊN & HIỆU ỨNG TRƯỢT NẢY
+   ========================================================= */
+.img-container .tooltip {
+  position: absolute;
+  top: calc(100% + 10px); /* Nằm ngay dưới khung icon 10px */
+  left: 50%;
+  transform: translateX(-50%) translateY(-6px) scale(0.92);
+
+  background-color: rgb(22, 25, 29);
+  color: rgb(243, 237, 237);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 5px 11px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1001;
+
+  transition: opacity 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+              transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+              visibility 0.25s;
+}
+
+/* Mũi tên nhỏ phía trên hộp Tooltip chỉ thẳng vào icon */
+.img-container .tooltip::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent rgb(22, 25, 29) transparent;
+}
+
+/* Khi rê chuột vào khung: Hộp Tooltip trượt nhẹ xuống và hiện rõ */
+.img-container:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+/* Chống tràn lề phải cho tooltip cuối cùng ("about me") */
+.user-container .tooltip {
+  left: auto;
+  right: 0;
+  transform: translateY(-6px) scale(0.92);
+}
+.user-container .tooltip::before {
+  left: auto;
+  right: 16px;
+}
+.user-container:hover .tooltip {
+  transform: translateY(0) scale(1);
+}
