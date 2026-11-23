@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>20 Mẫu UI Animation Cho Blog Cá Nhân & Dự Án</title>
+  <style>
+    /* =========================================================
+       1. HỆ THỐNG MÀU EDITORIAL DARK (Phong cách Blog/Portfolio)
+       ========================================================= */
+    :root {
+      --bg-page: #090a0f;
+      --bg-card: #12141d;
+      --bg-elevated: #1a1d2a;
+      --border-subtle: #262938;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      --accent-blue: #38bdf8;
+      --accent-indigo: #818cf8;
+      --accent-emerald: #34d399;
+      --accent-amber: #fbbf24;
+      --accent-rose: #fb7185;
+      --accent-purple: #c084fc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      padding: 50px 20px 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      text-align: center;
+      max-width: 700px;
+      margin-bottom: 44px;
+    }
+
+    header h1 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-indigo), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    header p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 22px;
+      width: 100%;
+      max-width: 1280px;
+    }
+
+    .showcase-box {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 36px 22px 28px;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .box-label {
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* =========================================================
+       01. MARKER HIGHLIGHT LINK (Tô bút dạ quang trong bài viết)
+       ========================================================= */
+    .b1-paragraph {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+    .b1-marker-link {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0 4px;
+      margin: 0 -2px;
+      border-radius: 4px;
+      background-image: linear-gradient(120deg, rgba(56, 189, 248, 0.25) 0%, rgba(129, 140, 248, 0.25) 100%);
+      background-repeat: no-repeat;
+      background-size: 100% 30%;
+      background-position: 0 90%;
+      transition: background-size 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.2s;
+    }
+    .b1-marker-link:hover {
+      background-size: 100% 100%;
+      color: #ffffff;
+    }
+
+    /* =========================================================
+       02. FOOTNOTE POPOVER (Chú thích học thuật [1])
+       ========================================================= */
+    .b2-text {
+      font-size: 15px;
+      color: var(--text-secondary);
+      position: relative;
+    }
+    .b2-footnote {
+      display: inline-block;
+      color: var(--accent-blue);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 1px 6px;
+      background: rgba(56, 189, 248, 0.12);
+      border-radius: 5px;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .b2-popover {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%) translateY(6px) scale(0.95);
+      width: 230px;
+      padding: 12px;
+      background: var(--bg-elevated);
+      border: 1px solid #334155;
+      border-radius: 8px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-primary);
+      line-height: 1.5;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+      pointer-events: none;
+      z-index: 20;
+    }
+    .b2-footnote:hover {
+      background: var(--accent-blue);
+      color: #090a0f;
+    }
+    .b2-footnote:hover .b2-popover {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    /* =========================================================
+       03. CODE COPY BUTTON (Nút Copy đoạn code chuyển trạng thái)
+       ========================================================= */
+    .b3-code-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 240px;
+      padding: 10px 14px;
+      background: #0d0f17;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      font-family: "Fira Code", monospace;
+      font-size: 13px;
+      color: var(--accent-emerald);
+    }
+    .b3-copy-btn {
+      background: var(--bg-elevated);
+      border: 1px solid #334155;
+      color: var(--text-secondary);
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .b3-copy-btn:hover {
+      color: var(--text-primary);
+      border-color: var(--accent-blue);
+    }
+    .b3-copy-btn.copied {
+      background: rgba(52, 211, 153, 0.15);
+      border-color: var(--accent-emerald);
+      color: var(--accent-emerald);
+      transform: scale(0.95);
+    }
+
+    /* =========================================================
+       04. SPOILER / PROOF REVEAL (Làm mờ lời giải / gợi ý)
+       ========================================================= */
+    .b4-spoiler-box {
+      padding: 12px 18px;
+      background: var(--bg-elevated);
+      border: 1px dashed #334155;
+      border-radius: 8px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .b4-spoiler-content {
+      font-size: 14px;
+      color: var(--accent-amber);
+      font-weight: 600;
+      filter: blur(6px);
+      user-select: none;
+      transition: filter 0.35s ease, transform 0.35s ease;
+    }
+    .b4-spoiler-box:hover .b4-spoiler-content,
+    .b4-spoiler-box.revealed .b4-spoiler-content {
+      filter: blur(0px);
+      user-select: auto;
+    }
+
+    /* =========================================================
+       05. CALLOUT / THEOREM BOX (Khung Định lý / Ghi chú học thuật)
+       ========================================================= */
+    .b5-callout {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(129, 140, 248, 0.06);
+      border-left: 3px solid var(--accent-indigo);
+      border-radius: 0 8px 8px 0;
+      transition: background 0.25s, border-left-width 0.2s, transform 0.25s;
+      cursor: default;
+    }
+    .b5-callout-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-indigo);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .b5-callout-title span {
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .b5-callout p {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+    }
+    .b5-callout:hover {
+      background: rgba(129, 140, 248, 0.12);
+      border-left-width: 6px;
+      transform: translateX(3px);
+    }
+    .b5-callout:hover .b5-callout-title span {
+      transform: scale(1.25) rotate(-10deg);
+    }
+
+    /* =========================================================
+       06. GITHUB REPO CARD (Thẻ dự án mã nguồn mở)
+       ========================================================= */
+    .b6-repo-card {
+      width: 100%;
+      padding: 16px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .b6-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--accent-blue);
+    }
+    .b6-arrow {
+      color: var(--text-muted);
+      transition: transform 0.25s ease, color 0.25s;
+    }
+    .b6-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .b6-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-amber);
+      display: inline-block;
+      margin-right: 4px;
+    }
+    .b6-repo-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(56, 189, 248, 0.5);
+      box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.4);
+    }
+    .b6-repo-card:hover .b6-arrow {
+      transform: translate(3px, -3px);
+      color: var(--accent-blue);
+    }
+
+    /* =========================================================
+       07. TOC SIDEBAR INDICATOR (Mục lục bài viết trượt vạch)
+       ========================================================= */
+    .b7-toc {
+      width: 200px;
+      border-left: 2px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+    }
+    .b7-toc-item {
+      padding: 8px 14px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      position: relative;
+      transition: color 0.2s, transform 0.2s, background 0.2s;
+    }
+    .b7-toc-item::before {
+      content: "";
+      position: absolute;
+      left: -2px;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: var(--accent-emerald);
+      transform: scaleY(0);
+      transition: transform 0.25s ease;
+    }
+    .b7-toc-item:hover {
+      color: var(--text-primary);
+      padding-left: 18px;
+      background: rgba(52, 211, 153, 0.06);
+    }
+    .b7-toc-item:hover::before {
+      transform: scaleY(1);
+    }
+
+    /* =========================================================
+       08. TOPIC HASHTAG PILL (Nhãn chủ đề #combinatorics)
+       ========================================================= */
+    .b8-tags {
+      display: flex;
+      gap: 10px;
+    }
+    .b8-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .b8-hash {
+      color: var(--accent-purple);
+      font-weight: 700;
+      transition: transform 0.25s ease;
+    }
+    .b8-tag:hover {
+      border-color: var(--accent-purple);
+      color: var(--text-primary);
+      transform: translateY(-2px);
+      background: rgba(192, 132, 252, 0.1);
+    }
+    .b8-tag:hover .b8-hash {
+      transform: rotate(15deg) scale(1.2);
+    }
+
+    /* =========================================================
+       09. READING TIME SWAPPER (Đổi "5 phút đọc" -> "Đọc ngay")
+       ========================================================= */
+    .b9-post-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg-elevated);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .b9-meta-wrap {
+      height: 20px;
+      overflow: hidden;
+      font-size: 12px;
+      font-weight: 500;
+      text-align: right;
+    }
+    .b9-meta-track {
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .b9-meta-track span {
+      height: 20px;
+      line-height: 20px;
+    }
+    .b9-read-cta {
+      color: var(--accent-blue);
+      font-weight: 700;
+    }
+    .b9-post-row:hover {
+      border-color: #334155;
+    }
+    .b9-post-row:hover .b9-meta-track {
+      transform: translateY(-20px);
+    }
+
+    /* =========================================================
+       10. EXTERNAL DOMAIN PEEK (Hiện tên miền khi hover link)
+       ========================================================= */
+    .b10-ext-link {
+      display: inline-flex;
+      align-items: center;
+      color: var(--accent-blue);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+      border-bottom: 1px dashed rgba(56, 189, 248, 0.5);
+      padding-bottom: 2px;
+    }
+    .b10-domain {
+      max-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 400;
+      opacity: 0;
+      transition: max-width 0.35s ease, opacity 0.25s ease, margin-left 0.25s ease;
+    }
+    .b10-ext-link:hover .b10-domain {
+      max-width: 120px;
+      opacity: 1;
+      margin-left: 6px;
+    }
+
+    /* =========================================================
+       11. CLAP / KUDOS BUTTON (Nút vỗ tay / thả tim cuối bài)
+       ========================================================= */
+    .b11-clap-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 30px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.2s, transform 0.1s;
+    }
+    .b11-heart {
+      font-size: 18px;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .b11-clap-btn:hover {
+      border-color: var(--accent-rose);
+    }
+    .b11-clap-btn:hover .b11-heart {
+      transform: scale(1.2);
+    }
+    .b11-clap-btn.popped .b11-heart {
+      animation: heart-burst 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes heart-burst {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.6) rotate(-12deg); }
+      100% { transform: scale(1.2); }
+    }
+
+    /* =========================================================
+       12. LIVE DEMO / SOURCE SWITCH (Cụm nút đôi cho Dự án)
+       ========================================================= */
+    .b12-action-group {
+      display: inline-flex;
+      background: #0d0f17;
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      gap: 4px;
+    }
+    .b12-btn {
+      padding: 8px 16px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      color: var(--text-secondary);
+      transition: all 0.25s ease;
+    }
+    .b12-btn.primary {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+    }
+    .b12-btn:hover {
+      background: var(--accent-indigo);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    /* =========================================================
+       13. IMAGE FIGURE CAPTION (Ảnh bài viết + chú thích trượt)
+       ========================================================= */
+    .b13-figure {
+      position: relative;
+      width: 240px;
+      height: 125px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      cursor: zoom-in;
+    }
+    .b13-art {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1e1b4b, #312e81, #4c1d95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .b13-figcaption {
+      position: absolute;
+      bottom: 0;
+      inset-x: 0;
+      padding: 8px 12px;
+      background: rgba(9, 10, 15, 0.85);
+      backdrop-filter: blur(4px);
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+    .b13-figure:hover .b13-art {
+      transform: scale(1.08);
+    }
+    .b13-figure:hover .b13-figcaption {
+      transform: translateY(0);
+    }
+
+    /* =========================================================
+       14. COMMAND K SEARCH BAR (Thanh tìm kiếm nhanh ⌘K)
+       ========================================================= */
+    .b14-search {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 230px;
+      padding: 9px 12px;
+      background: #0d0f17;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s, color 0.2s;
+    }
+    .b14-kbd {
+      padding: 2px 6px;
+      background: var(--bg-elevated);
+      border: 1px solid #334155;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+    }
+    .b14-search:hover {
+      border-color: var(--accent-blue);
+      color: var(--text-primary);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
+    }
+    .b14-search:hover .b14-kbd {
+      background: var(--accent-blue);
+      color: #090a0f;
+      border-color: var(--accent-blue);
+    }
+
+    /* =========================================================
+       15. ACCORDION DETAILS TOGGLE (Khung mở rộng chứng minh)
+       ========================================================= */
+    .b15-details {
+      width: 100%;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .b15-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      list-style: none;
+    }
+    .b15-chevron {
+      transition: transform 0.25s ease;
+      color: var(--accent-emerald);
+    }
+    .b15-body {
+      max-height: 0;
+      overflow: hidden;
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      transition: max-height 0.3s ease, margin-top 0.3s ease;
+    }
+    .b15-details:hover, .b15-details.open {
+      border-color: var(--accent-emerald);
+    }
+    .b15-details:hover .b15-chevron, .b15-details.open .b15-chevron {
+      transform: rotate(90deg);
+    }
+    .b15-details:hover .b15-body, .b15-details.open .b15-body {
+      max-height: 80px;
+      margin-top: 8px;
+    }
+
+    /* =========================================================
+       16. LOFI / AUDIO EQUALIZER (Nút nhạc nền góc trang Blog)
+       ========================================================= */
+    .b16-audio-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      color: var(--text-primary);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.25s;
+    }
+    .b16-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 2.5px;
+      height: 14px;
+    }
+    .b16-bars span {
+      width: 3px;
+      height: 4px;
+      background: var(--accent-purple);
+      border-radius: 2px;
+      transition: height 0.2s ease;
+    }
+    .b16-audio-btn:hover, .b16-audio-btn.playing {
+      border-color: var(--accent-purple);
+    }
+    .b16-audio-btn:hover .b16-bars span:nth-child(1),
+    .b16-audio-btn.playing .b16-bars span:nth-child(1) {
+      animation: eq-bar 0.6s ease-in-out infinite alternate;
+    }
+    .b16-audio-btn:hover .b16-bars span:nth-child(2),
+    .b16-audio-btn.playing .b16-bars span:nth-child(2) {
+      animation: eq-bar 0.45s ease-in-out infinite alternate 0.15s;
+    }
+    .b16-audio-btn:hover .b16-bars span:nth-child(3),
+    .b16-audio-btn.playing .b16-bars span:nth-child(3) {
+      animation: eq-bar 0.55s ease-in-out infinite alternate 0.3s;
+    }
+    @keyframes eq-bar {
+      0% { height: 4px; }
+      100% { height: 14px; }
+    }
+
+    /* =========================================================
+       17. AUTHOR AVATAR HALO (Thẻ tác giả kèm vòng trạng thái)
+       ========================================================= */
+    .b17-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 16px 8px 8px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 40px;
+      cursor: pointer;
+      transition: border-color 0.25s;
+    }
+    .b17-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s;
+    }
+    .b17-info h5 {
+      font-size: 13px;
+      color: var(--text-primary);
+    }
+    .b17-info span {
+      font-size: 11px;
+      color: var(--accent-emerald);
+    }
+    .b17-author:hover {
+      border-color: var(--accent-purple);
+    }
+    .b17-author:hover .b17-avatar {
+      transform: scale(1.1) rotate(-6deg);
+      box-shadow: 0 0 0 3px var(--bg-card), 0 0 0 5px var(--accent-purple);
+    }
+
+    /* =========================================================
+       18. BACK TO TOP SVG RING (Cuộn lên đầu trang + vòng tròn)
+       ========================================================= */
+    .b18-top-btn {
+      position: relative;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--bg-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-primary);
+      font-size: 18px;
+    }
+    .b18-top-btn svg {
+      position: absolute;
+      inset: 0;
+      width: 50px;
+      height: 50px;
+      transform: rotate(-90deg);
+    }
+    .b18-top-btn circle {
+      fill: none;
+      stroke: var(--accent-blue);
+      stroke-width: 2.5;
+      stroke-dasharray: 145;
+      stroke-dashoffset: 110;
+      transition: stroke-dashoffset 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .b18-arrow {
+      transition: transform 0.25s ease;
+    }
+    .b18-top-btn:hover circle {
+      stroke-dashoffset: 0;
+    }
+    .b18-top-btn:hover .b18-arrow {
+      transform: translateY(-3px);
+      color: var(--accent-blue);
+    }
+
+    /* =========================================================
+       19. BIBTEX / CITATION PILL (Nút trích dẫn bài nghiên cứu)
+       ========================================================= */
+    .b19-cite-box {
+      padding: 8px 16px;
+      background: #0d0f17;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .b19-cite-box:hover {
+      border-color: var(--accent-amber);
+      color: var(--accent-amber);
+      background: rgba(251, 191, 36, 0.08);
+    }
+
+    /* =========================================================
+       20. NEXT POST PAGINATION (Thẻ chuyển sang Bài viết kế tiếp)
+       ========================================================= */
+    .b20-next-card {
+      width: 100%;
+      padding: 14px 18px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .b20-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+    .b20-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .b20-title span {
+      transition: transform 0.25s ease;
+    }
+    .b20-next-card:hover {
+      border-color: var(--accent-blue);
+      transform: translateX(4px);
+    }
+    .b20-next-card:hover .b20-title {
+      color: var(--accent-blue);
+    }
+    .b20-next-card:hover .b20-title span {
+      transform: translateX(4px);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>20 Mẫu Micro-Interactions Cho Blog & Portfolio</h1>
+    <p>Bộ thành phần giao diện đặc trưng cho trang viết cá nhân, blog kỹ thuật/toán học và trang trưng bày dự án.</p>
+  </header>
+
+  <div class="grid">
+    <!-- 01 -->
+    <div class="showcase-box">
+      <span class="box-label">01. Marker Highlight Link</span>
+      <p class="b1-paragraph">
+        Khám phá giao thoa giữa <a href="#math" class="b1-marker-link">Tổ hợp</a> và <a href="#analysis" class="b1-marker-link">Giải tích điều hòa</a>.
+      </p>
+    </div>
+
+    <!-- 02 -->
+    <div class="showcase-box">
+      <span class="box-label">02. Footnote Popover</span>
+      <p class="b2-text">
+        Theo định lý Szemerédi–Trotter
+        <span class="b2-footnote">
+          [1]
+          <span class="b2-popover">
+            <strong>[1] Szemerédi & Trotter (1983):</strong> Giới hạn số giao điểm giữa điểm và đường thẳng trong mặt phẳng Euclid.
+          </span>
+        </span>
+      </p>
+    </div>
+
+    <!-- 03 -->
+    <div class="showcase-box">
+      <span class="box-label">03. Code Copy Button</span>
+      <div class="b3-code-bar">
+        <span>$ gcc main.c -o app</span>
+        <button class="b3-copy-btn" id="copyBtn">Copy</button>
+      </div>
+    </div>
+
+    <!-- 04 -->
+    <div class="showcase-box">
+      <span class="box-label">04. Spoiler / Proof Blur</span>
+      <div class="b4-spoiler-box" onclick="this.classList.toggle('revealed')">
+        <span class="b4-spoiler-content">Gợi ý: Áp dụng bất đẳng thức Cauchy-Schwarz</span>
+      </div>
+    </div>
+
+    <!-- 05 -->
+    <div class="showcase-box">
+      <span class="box-label">05. Theorem / Callout Box</span>
+      <div class="b5-callout">
+        <div class="b5-callout-title"><span>💡</span> Bổ đề 2.1 (Bất biến)</div>
+        <p>Mọi phép biến đổi tuyến tính bảo toàn cấu trúc không gian con.</p>
+      </div>
+    </div>
+
+    <!-- 06 -->
+    <div class="showcase-box">
+      <span class="box-label">06. GitHub Repo Card</span>
+      <a href="#repo" class="b6-repo-card">
+        <div class="b6-header">
+          <span>📦 combinatorics-notes</span>
+          <span class="b6-arrow">↗</span>
+        </div>
+        <div class="b6-meta">
+          <span><i class="b6-dot"></i>LaTeX / C</span>
+          <span>★ 128</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 07 -->
+    <div class="showcase-box">
+      <span class="box-label">07. TOC Sidebar Indicator</span>
+      <nav class="b7-toc">
+        <a href="#s1" class="b7-toc-item">1. Đặt vấn đề</a>
+        <a href="#s2" class="b7-toc-item">2. Không gian chiếu</a>
+        <a href="#s3" class="b7-toc-item">3. Kết luận</a>
+      </nav>
+    </div>
+
+    <!-- 08 -->
+    <div class="showcase-box">
+      <span class="box-label">08. Topic Hashtag Pill</span>
+      <div class="b8-tags">
+        <a href="#t1" class="b8-tag"><span class="b8-hash">#</span>topology</a>
+        <a href="#t2" class="b8-tag"><span class="b8-hash">#</span>ui-design</a>
+      </div>
+    </div>
+
+    <!-- 09 -->
+    <div class="showcase-box">
+      <span class="box-label">09. Reading Time Swapper</span>
+      <a href="#post" class="b9-post-row">
+        <span>Chứng minh Định lý Baire</span>
+        <div class="b9-meta-wrap">
+          <div class="b9-meta-track">
+            <span>6 phút đọc</span>
+            <span class="b9-read-cta">Đọc bài →</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 10 -->
+    <div class="showcase-box">
+      <span class="box-label">10. External Domain Peek</span>
+      <a href="#arxiv" class="b10-ext-link">
+        Bài báo gốc trên arXiv
+        <span class="b10-domain">(arxiv.org ↗)</span>
+      </a>
+    </div>
+
+    <!-- 11 -->
+    <div class="showcase-box">
+      <span class="box-label">11. Kudos / Clap Counter</span>
+      <button class="b11-clap-btn" id="clapBtn">
+        <span class="b11-heart">❤️</span>
+        <span id="clapCount">42</span>
+      </button>
+    </div>
+
+    <!-- 12 -->
+    <div class="showcase-box">
+      <span class="box-label">12. Demo / Source Switcher</span>
+      <div class="b12-action-group">
+        <a href="#demo" class="b12-btn primary">⚡ Live Demo</a>
+        <a href="#src" class="b12-btn">{ } Source</a>
+      </div>
+    </div>
+
+    <!-- 13 -->
+    <div class="showcase-box">
+      <span class="box-label">13. Image Figure Caption</span>
+      <figure class="b13-figure">
+        <div class="b13-art">🪐</div>
+        <figcaption class="b13-figcaption">Hình 1.2: Minh họa giao thoa sóng</figcaption>
+      </figure>
+    </div>
+
+    <!-- 14 -->
+    <div class="showcase-box">
+      <span class="box-label">14. Command K Search</span>
+      <div class="b14-search">
+        <span>🔍 Tìm bài viết...</span>
+        <kbd class="b14-kbd">⌘K</kbd>
+      </div>
+    </div>
+
+    <!-- 15 -->
+    <div class="showcase-box">
+      <span class="box-label">15. Proof / Details Accordion</span>
+      <div class="b15-details" onclick="this.classList.toggle('open')">
+        <div class="b15-summary">
+          <span>Xem chi tiết chứng minh</span>
+          <span class="b15-chevron">❯</span>
+        </div>
+        <div class="b15-body">
+          Xét dãy tập mở trù mật $U_n$, giao của chúng vẫn trù mật trong không gian metric đầy đủ.
+        </div>
+      </div>
+    </div>
+
+    <!-- 16 -->
+    <div class="showcase-box">
+      <span class="box-label">16. Lofi BGM Equalizer</span>
+      <button class="b16-audio-btn" onclick="this.classList.toggle('playing')">
+        <div class="b16-bars">
+          <span></span><span></span><span></span>
+        </div>
+        <span>Lofi Chill BGM</span>
+      </button>
+    </div>
+
+    <!-- 17 -->
+    <div class="showcase-box">
+      <span class="box-label">17. Author Bio Halo</span>
+      <div class="b17-author">
+        <div class="b17-avatar">🎻</div>
+        <div class="b17-info">
+          <h5>Góc Tác Giả</h5>
+          <span>● Đang viết bài mới</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 18 -->
+    <div class="showcase-box">
+      <span class="box-label">18. Back-To-Top Progress</span>
+      <div class="b18-top-btn" title="Lên đầu trang">
+        <svg><circle cx="25" cy="25" r="23"></circle></svg>
+        <span class="b18-arrow">↑</span>
+      </div>
+    </div>
+
+    <!-- 19 -->
+    <div class="showcase-box">
+      <span class="box-label">19. BibTeX Citation Copy</span>
+      <div class="b19-cite-box" onclick="this.textContent = '✓ Đã chép BibTeX!'">
+        @article{cite2026, ...}
+      </div>
+    </div>
+
+    <!-- 20 -->
+    <div class="showcase-box">
+      <span class="box-label">20. Next Article Card</span>
+      <a href="#next" class="b20-next-card">
+        <span class="b20-sub">Bài viết tiếp theo</span>
+        <div class="b20-title">Không gian Metric & Tôpô <span>→</span></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       SCRIPT TƯƠNG TÁC NHỎ CHO NÚT COPY & NÚT THẢ TIM
+       ========================================================= -->
+  <script>
+    // Xử lý nút Copy (Mẫu 03)
+    const copyBtn = document.getElementById('copyBtn');
+    copyBtn.addEventListener('click', () => {
+      copyBtn.textContent = 'Copied ✓';
+      copyBtn.classList.add('copied');
+      setTimeout(() => {
+        copyBtn.textContent = 'Copy';
+        copyBtn.classList.remove('copied');
+      }, 1500);
+    });
+
+    // Xử lý nút Thả tim tăng số đếm (Mẫu 11)
+    const clapBtn = document.getElementById('clapBtn');
+    const clapCount = document.getElementById('clapCount');
+    let count = 42;
+    clapBtn.addEventListener('click', () => {
+      count++;
+      clapCount.textContent = count;
+      clapBtn.classList.remove('popped');
+      void clapBtn.offsetWidth; // Reflow để kích hoạt lại animation
+      clapBtn.classList.add('popped');
+    });
+  </script>
+
+</body>
+</html>

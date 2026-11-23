@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>15 Mẫu Trang Trí Biểu Tượng & Hiệu Ứng Chuyển Trang</title>
+  <style>
+    /* =========================================================
+       1. CẤU HÌNH HỆ THỐNG MÀU & LAYOUT CHUNG
+       ========================================================= */
+    :root {
+      --bg-dark: #090d16;
+      --card-bg: #111827;
+      --card-border: #1e293b;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+
+      --blue: #3b82f6;
+      --indigo: #6366f1;
+      --violet: #8b5cf6;
+      --pink: #ec4899;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --cyan: #06b6d4;
+      --rose: #f43f5e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      padding: 56px 20px 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Thanh loading giả lập chuyển trang trên đỉnh màn hình */
+    .top-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--cyan), var(--violet), var(--pink));
+      z-index: 9999;
+      transition: width 0.4s ease, opacity 0.3s ease;
+      box-shadow: 0 0 12px var(--cyan);
+    }
+
+    /* Hộp thông báo trạng thái chuyển trang */
+    .redirect-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: var(--text-main);
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      transform: translateY(120%);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      z-index: 9999;
+    }
+    .redirect-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 44px;
+      max-width: 680px;
+    }
+
+    header h1 {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #38bdf8, #a855f7, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    header p {
+      font-size: 14px;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 24px;
+      width: 100%;
+      max-width: 1240px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 28px 20px;
+      min-height: 210px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      gap: 14px;
+    }
+
+    .card-title {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-sub);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .hint {
+      position: absolute;
+      bottom: 12px;
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    /* Reset mặc định cho thẻ <a> điều hướng */
+    a.nav-link {
+      text-decoration: none;
+      color: inherit;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* =========================================================
+       01. EXTERNAL PORTAL ARROW (Mũi tên phóng chéo sang tab mới)
+       ========================================================= */
+    .n1-portal {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 18px 10px 12px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .n1-icon-box {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      overflow: hidden;
+      position: relative;
+    }
+    .n1-icon-box span {
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .n1-portal:hover {
+      border-color: var(--blue);
+      background: #172554;
+    }
+    .n1-portal:hover .n1-icon-box span {
+      transform: translate(3px, -3px);
+    }
+    /* Khi bấm giữ hoặc chuyển trang: mũi tên phóng vọt hẳn ra ngoài */
+    .n1-portal:active .n1-icon-box span,
+    .n1-portal.is-redirecting .n1-icon-box span {
+      transform: translate(24px, -24px);
+    }
+
+    /* =========================================================
+       02. EXPANDING PILL ICON (Biểu tượng tròn bung thành nút dài)
+       ========================================================= */
+    .n2-pill {
+      display: inline-flex;
+      align-items: center;
+      height: 48px;
+      max-width: 48px;
+      background: linear-gradient(135deg, var(--indigo), var(--violet));
+      border-radius: 24px;
+      padding: 0 14px;
+      overflow: hidden;
+      white-space: nowrap;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+      transition: max-width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.15s;
+    }
+    .n2-icon {
+      font-size: 20px;
+      min-width: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .n2-text {
+      font-size: 14px;
+      font-weight: 600;
+      margin-left: 12px;
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: opacity 0.25s ease 0.05s, transform 0.25s ease 0.05s;
+    }
+    .n2-pill:hover {
+      max-width: 200px;
+      padding: 0 20px 0 16px;
+    }
+    .n2-pill:hover .n2-text {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .n2-pill:active, .n2-pill.is-redirecting {
+      transform: scale(0.92);
+    }
+
+    /* =========================================================
+       03. ISOMETRIC LAYERED ICON (Biểu tượng xếp 3 tầng không gian)
+       ========================================================= */
+    .n3-iso-wrap {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .n3-layer {
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s;
+    }
+    .n3-layer-1 {
+      background: rgba(236, 72, 153, 0.2);
+      border: 1px solid rgba(236, 72, 153, 0.4);
+    }
+    .n3-layer-2 {
+      background: rgba(236, 72, 153, 0.4);
+      border: 1px solid rgba(236, 72, 153, 0.6);
+    }
+    .n3-layer-main {
+      background: var(--pink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);
+    }
+    .n3-iso-wrap:hover .n3-layer-1 {
+      transform: translate(-10px, 10px);
+    }
+    .n3-iso-wrap:hover .n3-layer-2 {
+      transform: translate(-5px, 5px);
+    }
+    .n3-iso-wrap:hover .n3-layer-main {
+      transform: translate(4px, -4px);
+    }
+    /* Khi click: Các lớp nhập làm một để chuyển trang */
+    .n3-iso-wrap:active .n3-layer,
+    .n3-iso-wrap.is-redirecting .n3-layer {
+      transform: translate(0, 0) scale(0.9) !important;
+    }
+
+    /* =========================================================
+       04. DUAL ICON SWAPPER (Hộp trượt thay thế biểu tượng)
+       ========================================================= */
+    .n4-swap-box {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .n4-icon-a, .n4-icon-b {
+      position: absolute;
+      font-size: 22px;
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s;
+    }
+    .n4-icon-b {
+      transform: translateX(-45px);
+      opacity: 0;
+      color: var(--emerald);
+    }
+    .n4-swap-box:hover {
+      border-color: var(--emerald);
+      background: rgba(16, 185, 129, 0.1);
+    }
+    .n4-swap-box:hover .n4-icon-a {
+      transform: translateX(45px);
+      opacity: 0;
+    }
+    .n4-swap-box:hover .n4-icon-b {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    .n4-swap-box.is-redirecting .n4-icon-b {
+      transform: scale(1.4);
+      opacity: 0;
+    }
+
+    /* =========================================================
+       05. ROCKET LAUNCH PAD (Tên lửa rồ ga & phóng đi khi click)
+       ========================================================= */
+    .n5-launchpad {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 22px;
+      background: #1e1b4b;
+      border: 1px solid #4338ca;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      overflow: hidden;
+      position: relative;
+    }
+    .n5-rocket {
+      display: inline-block;
+      font-size: 18px;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .n5-launchpad:hover .n5-rocket {
+      animation: rocket-vibrate 0.25s infinite;
+    }
+    /* Khi click: Phóng vút lên trời để qua trang khác */
+    .n5-launchpad.is-redirecting .n5-rocket {
+      animation: none;
+      transform: translate(35px, -45px) scale(1.3);
+    }
+    @keyframes rocket-vibrate {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-1px, -2px); }
+    }
+
+    /* =========================================================
+       06. ORBIT RING COMPASS (Vòng la bàn xoay định vị)
+       ========================================================= */
+    .n6-orbit-btn {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #172554;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    .n6-orbit-btn::before {
+      content: "";
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 2px dashed var(--cyan);
+      transition: transform 0.6s ease, inset 0.3s ease;
+    }
+    .n6-orbit-btn:hover::before {
+      transform: rotate(90deg);
+      inset: -8px;
+    }
+    .n6-orbit-btn.is-redirecting::before {
+      transform: rotate(360deg) scale(0.8);
+      border-style: solid;
+    }
+
+    /* =========================================================
+       07. MECHANICAL KEYCAP (Phím bấm bàn phím cơ học)
+       ========================================================= */
+    .n7-keycap {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+      border: 1px solid #475569;
+      border-radius: 10px;
+      box-shadow: 0 5px 0 #0f172a, 0 8px 15px rgba(0, 0, 0, 0.4);
+      font-size: 14px;
+      font-weight: 700;
+      color: #e2e8f0;
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+    }
+    .n7-badge {
+      padding: 2px 7px;
+      background: #0f172a;
+      border-radius: 5px;
+      font-size: 12px;
+      color: var(--amber);
+      border: 1px solid #334155;
+    }
+    .n7-keycap:hover {
+      color: #ffffff;
+      border-color: var(--amber);
+    }
+    .n7-keycap:active, .n7-keycap.is-redirecting {
+      transform: translateY(5px);
+      box-shadow: 0 0px 0 #0f172a, 0 2px 5px rgba(0, 0, 0, 0.4);
+    }
+
+    /* =========================================================
+       08. SPINNER MORPH LINK (Biến mũi tên thành vòng xoay tải trang)
+       ========================================================= */
+    .n8-loader-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      background: var(--emerald);
+      color: #052e16;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 10px;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .n8-icon-wrap {
+      width: 18px;
+      height: 18px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .n8-arrow {
+      transition: transform 0.25s, opacity 0.2s;
+    }
+    .n8-spinner {
+      position: absolute;
+      inset: 0;
+      border: 2.5px solid rgba(5, 46, 22, 0.25);
+      border-top-color: #052e16;
+      border-radius: 50%;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .n8-loader-link:hover .n8-arrow {
+      transform: translateX(4px);
+    }
+    /* Khi bấm chuyển trang: Ẩn mũi tên và quay vòng loading */
+    .n8-loader-link.is-redirecting .n8-arrow {
+      opacity: 0;
+      transform: scale(0);
+    }
+    .n8-loader-link.is-redirecting .n8-spinner {
+      opacity: 1;
+      transform: scale(1);
+      animation: spin-fast 0.6s linear infinite;
+    }
+    @keyframes spin-fast {
+      to { transform: rotate(360deg); }
+    }
+
+    /* =========================================================
+       09. GLASS BADGE & STATUS DOT (Huy hiệu kính + chấm báo hiệu)
+       ========================================================= */
+    .n9-glass-badge {
+      position: relative;
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      transition: transform 0.3s ease, background 0.3s, border-color 0.3s;
+    }
+    .n9-dot {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 14px;
+      height: 14px;
+      background: var(--rose);
+      border: 2px solid var(--card-bg);
+      border-radius: 50%;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s;
+    }
+    .n9-glass-badge:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+    .n9-glass-badge:hover .n9-dot {
+      transform: scale(1.3);
+      background: var(--emerald);
+    }
+    .n9-glass-badge.is-redirecting {
+      transform: scale(0.88);
+    }
+
+    /* =========================================================
+       10. FOLDER DRAWER OPEN (Mở cặp tài liệu rút hồ sơ)
+       ========================================================= */
+    .n10-folder {
+      position: relative;
+      width: 68px;
+      height: 50px;
+      background: #d97706;
+      border-radius: 0 8px 8px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.25s;
+    }
+    /* Tai thư mục phía trên */
+    .n10-folder::before {
+      content: "";
+      position: absolute;
+      top: -7px;
+      left: 0;
+      width: 26px;
+      height: 7px;
+      background: #d97706;
+      border-radius: 5px 5px 0 0;
+    }
+    /* Tờ giấy trắng bên trong */
+    .n10-paper {
+      width: 52px;
+      height: 38px;
+      background: #f8fafc;
+      border-radius: 4px;
+      position: absolute;
+      bottom: 6px;
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: #334155;
+    }
+    /* Mặt trước thư mục */
+    .n10-front {
+      position: absolute;
+      inset: 0;
+      background: var(--amber);
+      border-radius: 0 8px 8px 8px;
+      transform-origin: bottom;
+      transition: transform 0.3s ease;
+    }
+    .n10-folder:hover .n10-front {
+      transform: perspective(300px) rotateX(-28deg);
+    }
+    .n10-folder:hover .n10-paper {
+      transform: translateY(-14px);
+    }
+    .n10-folder.is-redirecting .n10-paper {
+      transform: translateY(-32px) scale(1.1);
+    }
+
+    /* =========================================================
+       11. STEP FLIPPER CARD (Lật thẻ số thứ tự chương/trang)
+       ========================================================= */
+    .n11-step-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 18px 8px 8px;
+      background: #1e293b;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .n11-num-box {
+      width: 36px;
+      height: 36px;
+      background: var(--violet);
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      font-weight: 800;
+    }
+    .n11-num-track {
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .n11-num-track span {
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .n11-step-link:hover .n11-num-track {
+      transform: translateY(-36px);
+    }
+    .n11-step-link.is-redirecting {
+      border-color: var(--violet);
+      transform: translateX(6px);
+      transition: transform 0.2s;
+    }
+
+    /* =========================================================
+       12. LIQUID BLOB ICON (Khối chất lỏng biến hình)
+       ========================================================= */
+    .n12-blob {
+      width: 58px;
+      height: 58px;
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 6px 20px rgba(6, 182, 212, 0.35);
+      transition: border-radius 0.5s ease, transform 0.3s ease;
+    }
+    .n12-blob:hover {
+      border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+      transform: scale(1.08) rotate(5deg);
+    }
+    .n12-blob.is-redirecting {
+      border-radius: 50%;
+      transform: scale(0.85);
+    }
+
+    /* =========================================================
+       13. CYBERPUNK CUT-CORNER TAG (Nhãn vạt góc viễn tưởng)
+       ========================================================= */
+    .n13-cyber {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      background: #18181b;
+      color: var(--cyan);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+      border-left: 3px solid var(--cyan);
+      transition: all 0.25s ease;
+    }
+    .n13-cyber:hover {
+      background: var(--cyan);
+      color: #090d16;
+      padding-left: 28px;
+    }
+    .n13-cyber.is-redirecting {
+      background: var(--pink);
+      border-color: var(--pink);
+      color: white;
+    }
+
+    /* =========================================================
+       14. RIBBON BOOKMARK DROP (Dải ruy-băng kéo thả)
+       ========================================================= */
+    .n14-ribbon {
+      width: 46px;
+      height: 60px;
+      background: var(--rose);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 14px;
+      font-size: 18px;
+      transition: height 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s;
+    }
+    .n14-ribbon:hover {
+      height: 74px;
+      background: #e11d48;
+    }
+    .n14-ribbon.is-redirecting {
+      height: 50px;
+    }
+
+    /* =========================================================
+       15. PORTAL SHOCKWAVE RING (Sóng xung kích mở trang)
+       ========================================================= */
+    .n15-portal-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 22px;
+      background: #1e293b;
+      border: 1px solid #475569;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 1;
+    }
+    .n15-icon-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: transform 0.3s ease;
+    }
+    .n15-portal-btn:hover .n15-icon-circle {
+      transform: rotate(45deg) scale(1.1);
+    }
+    /* Sóng nổ ra khi click */
+    .n15-portal-btn::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 30px;
+      border: 2px solid var(--blue);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .n15-portal-btn.is-redirecting::after {
+      animation: shockwave 0.6s ease-out forwards;
+    }
+    @keyframes shockwave {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.45); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Thanh tiến trình giả lập chuyển trang -->
+  <div class="top-loader" id="topLoader"></div>
+
+  <!-- Toast báo hiệu đang chuyển hướng -->
+  <div class="redirect-toast" id="redirectToast">
+    <span>🚀</span>
+    <span id="toastText">Đang mở trang đích...</span>
+  </div>
+
+  <header>
+    <h1>15 Mẫu Trang Trí Biểu Tượng & Chuyển Trang</h1>
+    <p>Rê chuột để xem hiệu ứng trang trí biểu tượng — <strong>Bấm chuột (Click)</strong> vào từng mẫu để trải nghiệm hiệu ứng kích hoạt chuyển sang trang khác.</p>
+  </header>
+
+  <div class="grid">
+    <!-- 01 -->
+    <div class="card">
+      <span class="card-title">01. External Portal</span>
+      <a href="#tai-lieu-ngoai" class="nav-link n1-portal">
+        <div class="n1-icon-box"><span>↗</span></div>
+        <span>Tài liệu tham khảo</span>
+      </a>
+      <span class="hint">Click để phóng mũi tên</span>
+    </div>
+
+    <!-- 02 -->
+    <div class="card">
+      <span class="card-title">02. Expanding Pill</span>
+      <a href="#kham-pha" class="nav-link n2-pill">
+        <span class="n2-icon">🧭</span>
+        <span class="n2-text">Khám phá ngay →</span>
+      </a>
+      <span class="hint">Rê chuột bung rộng + Click</span>
+    </div>
+
+    <!-- 03 -->
+    <div class="card">
+      <span class="card-title">03. Isometric Layers</span>
+      <a href="#bo-suu-tap" class="nav-link n3-iso-wrap">
+        <div class="n3-layer n3-layer-1"></div>
+        <div class="n3-layer n3-layer-2"></div>
+        <div class="n3-layer n3-layer-main">💎</div>
+      </a>
+      <span class="hint">Biểu tượng 3 lớp tách tầng</span>
+    </div>
+
+    <!-- 04 -->
+    <div class="card">
+      <span class="card-title">04. Dual Icon Swapper</span>
+      <a href="#trang-chu" class="nav-link n4-swap-box">
+        <span class="n4-icon-a">🏠</span>
+        <span class="n4-icon-b">➔</span>
+      </a>
+      <span class="hint">Trượt đổi biểu tượng đích</span>
+    </div>
+
+    <!-- 05 -->
+    <div class="card">
+      <span class="card-title">05. Rocket Launchpad</span>
+      <a href="#khoi-chay-du-an" class="nav-link n5-launchpad">
+        <span class="n5-rocket">🚀</span>
+        <span>Khởi chạy hệ thống</span>
+      </a>
+      <span class="hint">Click để phóng tên lửa đi</span>
+    </div>
+
+    <!-- 06 -->
+    <div class="card">
+      <span class="card-title">06. Orbit Ring</span>
+      <a href="#ban-do-so" class="nav-link n6-orbit-btn">
+        🌐
+      </a>
+      <span class="hint">Vành đai xoay quanh icon</span>
+    </div>
+
+    <!-- 07 -->
+    <div class="card">
+      <span class="card-title">07. Mechanical Keycap</span>
+      <a href="#tim-kiem-nhanh" class="nav-link n7-keycap">
+        <span>Truy cập nhanh</span>
+        <span class="n7-badge">↵ Enter</span>
+      </a>
+      <span class="hint">Bấm lún như phím cơ</span>
+    </div>
+
+    <!-- 08 -->
+    <div class="card">
+      <span class="card-title">08. Spinner Morph</span>
+      <a href="#thanh-toan" class="nav-link n8-loader-link">
+        <span>Tiếp tục thanh toán</span>
+        <div class="n8-icon-wrap">
+          <span class="n8-arrow">→</span>
+          <div class="n8-spinner"></div>
+        </div>
+      </a>
+      <span class="hint">Click biến mũi tên thành Loader</span>
+    </div>
+
+    <!-- 09 -->
+    <div class="card">
+      <span class="card-title">09. Glass Status Badge</span>
+      <a href="#hop-thu-den" class="nav-link n9-glass-badge">
+        <span>💬</span>
+        <span class="n9-dot"></span>
+      </a>
+      <span class="hint">Kính mờ + chấm trạng thái</span>
+    </div>
+
+    <!-- 10 -->
+    <div class="card">
+      <span class="card-title">10. Folder Drawer</span>
+      <a href="#ho-so-luu-tru" class="nav-link n10-folder">
+        <div class="n10-paper">OPEN</div>
+        <div class="n10-front"></div>
+      </a>
+      <span class="hint">Mở nắp thư mục rút giấy</span>
+    </div>
+
+    <!-- 11 -->
+    <div class="card">
+      <span class="card-title">11. Step Flipper</span>
+      <a href="#bai-hoc-tiep-theo" class="nav-link n11-step-link">
+        <div class="n11-num-box">
+          <div class="n11-num-track">
+            <span>01</span>
+            <span>02</span>
+          </div>
+        </div>
+        <span>Qua chương tiếp</span>
+      </a>
+      <span class="hint">Cuộn số thứ tự trang</span>
+    </div>
+
+    <!-- 12 -->
+    <div class="card">
+      <span class="card-title">12. Liquid Morph</span>
+      <a href="#phong-thi-nghiem" class="nav-link n12-blob">
+        🧪
+      </a>
+      <span class="hint">Giọt nước biến thiên hình học</span>
+    </div>
+
+    <!-- 13 -->
+    <div class="card">
+      <span class="card-title">13. Cyberpunk Tag</span>
+      <a href="#khu-vuc-vip" class="nav-link n13-cyber">
+        <span>⚡</span>
+        <span>Vào cổng Server</span>
+      </a>
+      <span class="hint">Vạt góc + nháy màu khi click</span>
+    </div>
+
+    <!-- 14 -->
+    <div class="card">
+      <span class="card-title">14. Bookmark Ribbon</span>
+      <a href="#bai-viet-da-luu" class="nav-link n14-ribbon">
+        🔖
+      </a>
+      <span class="hint">Ruy-băng kéo giãn</span>
+    </div>
+
+    <!-- 15 -->
+    <div class="card">
+      <span class="card-title">15. Shockwave Portal</span>
+      <a href="#trang-dich-moi" class="nav-link n15-portal-btn">
+        <span>Chuyển trang</span>
+        <div class="n15-icon-circle">↗</div>
+      </a>
+      <span class="hint">Click tỏa sóng xung kích</span>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       SCRIPT KÍCH HOẠT HIỆU ỨNG CHUYỂN TRANG KHI BẤM
+       ========================================================= -->
+  <script>
+    const links = document.querySelectorAll('.nav-link');
+    const loader = document.getElementById('topLoader');
+    const toast = document.getElementById('redirectToast');
+    const toastText = document.getElementById('toastText');
+    let timer;
+
+    links.forEach(link => {
+      link.addEventListener('click', function (e) {
+        e.preventDefault(); // Chặn nhảy trang thật để bạn test hiệu ứng thoải mái
+        const targetUrl = this.getAttribute('href');
+
+        // 1. Gắn class kích hoạt animation phóng/tải trang của nút vừa bấm
+        this.classList.add('is-redirecting');
+
+        // 2. Chạy thanh loading trên đỉnh trình duyệt
+        loader.style.opacity = '1';
+        loader.style.width = '75%';
+
+        // 3. Hiển thị thông báo chuyển hướng
+        toastText.textContent = `Đang chuyển hướng tới: ${targetUrl}`;
+        toast.classList.add('show');
+
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          loader.style.width = '100%';
+          
+          setTimeout(() => {
+            // Reset lại trạng thái sau khi giả lập chuyển trang xong
+            this.classList.remove('is-redirecting');
+            toast.classList.remove('show');
+            loader.style.opacity = '0';
+            setTimeout(() => { loader.style.width = '0%'; }, 300);
+
+            /* LƯU Ý KHI DÙNG THỰC TẾ:
+               Chỉ cần mở dòng code dưới đây để trình duyệt chuyển sang trang mới thật sự
+               sau khi chạy xong animation (khoảng 400ms):
+               window.location.href = targetUrl; 
+            */
+          }, 450);
+        }, 500);
+      });
+    });
+  </script>
+
+</body>
+</html>

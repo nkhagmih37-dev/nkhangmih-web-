@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Tarot Card Carousel Animation</title>
+  <!-- Nhúng GSAP và Draggable Plugin -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background-color: #12100e;
+      color: #e5c98b;
+      font-family: 'Georgia', serif;
+      overflow: hidden;
+      height: 100vh;
+      user-select: none;
+    }
+
+    /* Khung sân khấu chính */
+    .tarot-stage {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      perspective: 1200px;
+      overflow: hidden;
+    }
+
+    /* Tiêu đề phía trên */
+    .header-title {
+      position: absolute;
+      top: 6%;
+      text-align: center;
+      z-index: 50;
+      pointer-events: none;
+    }
+    .header-title h1 {
+      font-size: 2.5rem;
+      font-weight: normal;
+      letter-spacing: 6px;
+      color: #e5c98b;
+      text-shadow: 0 0 20px rgba(229, 201, 139, 0.4);
+    }
+    .header-title span {
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      opacity: 0.6;
+      text-transform: uppercase;
+    }
+
+    /* Khu vực chứa vòng xoay bài */
+    .carousel-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: grab;
+    }
+    .carousel-container:active {
+      cursor: grabbing;
+    }
+
+    /* Lá bài Tarot */
+    .tarot-card {
+      position: absolute;
+      width: 220px;
+      height: 360px;
+      border-radius: 12px;
+      border: 2px solid #c5a059;
+      background: linear-gradient(145deg, #1f1b16, #100e0b);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 0 15px rgba(197, 160, 89, 0.15);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 10px;
+      transform-origin: bottom center;
+      /* Đảm bảo lá bài mượt mà khi chuyển động */
+      will-change: transform;
+    }
+
+    /* Họa tiết mặt lưng lá bài */
+    .card-inner-frame {
+      width: 100%;
+      height: 100%;
+      border: 1px dashed rgba(197, 160, 89, 0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+    }
+    .card-symbol {
+      font-size: 1.5rem;
+      color: #c5a059;
+      opacity: 0.8;
+    }
+    .card-label {
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      color: #c5a059;
+      opacity: 0.7;
+      text-transform: uppercase;
+    }
+
+    /* Hướng dẫn nhỏ bên dưới */
+    .hint-text {
+      position: absolute;
+      bottom: 5%;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      opacity: 0.4;
+      pointer-events: none;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="tarot-stage" id="stage">
+    <!-- Tiêu đề -->
+    <div class="header-title">
+      <h1>CARD #0 TO #21</h1>
+      <span>Major Arcana Collection</span>
+    </div>
+
+    <!-- Dải bài Tarot (Carousel) -->
+    <div class="carousel-container" id="carousel">
+      <!-- Tạo sẵn 12 lá bài tượng trưng cho vòng xoay -->
+      <div class="tarot-card"><div class="card-inner-frame"><span class="card-symbol">✦</span><span class="card-label">Card #00</span><span class="card-symbol">✦</span></div></div>
+      <div class="tarot-card"><div class="card-inner-frame"><span class="card-symbol">✦</span><span class="card-label">Card #01</span><span class="card-symbol">✦</span></div></div>
+      <div class="tarot-card"><div class="card-inner-frame"><span class="card-symbol">✦</span><span class="card-label">Card #02</span><span class="card-symbol">✦</span></div></div>
+      <div class="tarot-card"><div class="card-inner-frame"><span class="card-symbol">✦</span><span class="card-label">Card #03</span><span class="card-symbol">✦</span></div></div>
+      <div class="tarot-card"><div class="card-inner-frame"><span class="card-symbol">✦</span><span class="card-label">Card #04</span><span class="card-symbol">✦</span></div></div>
+      <div class="tarot-card"><div class="card-inner-frame"><span class="card-symbol">✦</span><span class="card-label">Card #05</span><span class="card-symbol">✦</span></div></div>
+      <div class="tarot-card"><div class="card-inner-frame"><span class="card-symbol">✦</span><span class="card-label">Card #06</span><span class="card-symbol">✦</span></div></div>
+      <div class="tarot-card"><div class="card-inner-frame"><span class="card-symbol">✦</span><span class="card-label">Card #07</span><span class="card-symbol">✦</span></div></div>
+      <div class="tarot-card"><div class="card-inner-frame"><span class="card-symbol">✦</span><span class="card-label">Card #08</span><span class="card-symbol">✦</span></div></div>
+      <div class="tarot-card"><div class="card-inner-frame"><span class="card-symbol">✦</span><span class="card-label">Card #09</span><span class="card-symbol">✦</span></div></div>
+      <div class="tarot-card"><div class="card-inner-frame"><span class="card-symbol">✦</span><span class="card-label">Card #10</span><span class="card-symbol">✦</span></div></div>
+      <div class="tarot-card"><div class="card-inner-frame"><span class="card-symbol">✦</span><span class="card-label">Card #11</span><span class="card-symbol">✦</span></div></div>
+    </div>
+
+    <div class="hint-text">← Kéo sang trái hoặc phải để khám phá →</div>
+  </div>
+
+  <script>
+    const cards = document.querySelectorAll('.tarot-card');
+    const totalCards = cards.length;
+    
+    // Các thông số cấu hình vòng cung
+    const radius = 900;       // Bán kính vòng cung (càng lớn vòng cung càng thoải)
+    const angleStep = 8;      // Khoảng cách góc giữa các lá bài (độ)
+    
+    let currentAngle = 0;     // Góc xoay hiện tại của vòng tròn
+
+    // Hàm cập nhật vị trí và góc xoay của từng lá bài theo hình cung
+    function updateCarousel(angle) {
+      cards.forEach((card, i) => {
+        // Tính góc riêng cho từng lá bài dựa trên vị trí trung tâm
+        const cardAngle = angle + (i - Math.floor(totalCards / 2)) * angleStep;
+        const rad = cardAngle * (Math.PI / 180);
+        
+        // Công thức định vị theo tọa độ cực (Polar to Cartesian coordinates)
+        const x = Math.sin(rad) * radius;
+        const y = Math.cos(rad) * radius - radius + 350; // Điều chỉnh độ cao tâm cung
+        
+        // Áp dụng transform cho lá bài
+        card.style.transform = `translate(${x}px, ${y}px) rotate(${cardAngle}deg)`;
+        
+        // Làm mờ nhẹ các lá ở rìa xa để tạo chiều sâu 3D
+        const opacity = Math.max(0.2, 1 - Math.abs(cardAngle) / 50);
+        card.style.opacity = opacity;
+      });
+    }
+
+    // Khởi tạo vị trí ban đầu
+    updateCarousel(currentAngle);
+
+    // Sử dụng GSAP Draggable để tạo hiệu ứng kéo thả mượt mà và quán tính
+    let proxy = document.createElement("div"); // Thẻ ảo để theo dõi chuyển động kéo
+
+    Draggable.create(proxy, {
+      trigger: "#stage",
+      type: "x",
+      inertia: true, // Tạo hiệu ứng trượt quán tính khi thả chuột
+      onDrag: function() {
+        // Thay đổi góc quay dựa trên khoảng dịch chuyển chuột (deltaX)
+        currentAngle += this.deltaX * 0.15;
+        updateCarousel(currentAngle);
+      },
+      onThrowUpdate: function() {
+        // Tiếp tục cập nhật trong quá trình trượt quán tính
+        currentAngle += this.deltaX * 0.15;
+        updateCarousel(currentAngle);
+      }
+    });
+
+    // Hỗ trợ thêm sự kiện lăn chuột (Wheel scroll) để cuộn qua lại
+    window.addEventListener("wheel", (e) => {
+      currentAngle += e.deltaY * 0.05;
+      updateCarousel(currentAngle);
+    });
+  </script>
+</body>
+</html>

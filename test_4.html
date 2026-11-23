@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đặng Chí Khang — Personal Mathematical Blog</title>
+  <!-- Google Fonts tương đồng với thiết kế gốc -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;1,700&family=Newsreader:opsz,wght@6..72,600;6..72,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       1. BIẾN MÀU SẮC & CẤU HÌNH NỀN BẢNG ĐEN (CHALKBOARD DARK)
+       ========================================================= */
+    :root {
+      --bg-chalkboard: #181514;
+      --bg-surface: #211d1b;
+      --bg-elevated: #2a2523;
+      --border-line: rgba(255, 255, 255, 0.12);
+      
+      --text-main: #f3f4f6;
+      --text-muted: #a8a29e;
+      
+      /* Màu nhấn từ thiết kế gốc */
+      --cyan-greeting: #00e5ff;
+      --title-blue: #bce3ff;
+      --title-cream: #f4f0a8;
+      --knot-green: #8ce99a;
+      --knot-yellow: #e9fac8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-chalkboard);
+      color: var(--text-main);
+      font-family: 'Jost', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Thanh tiến trình chạy trên đỉnh khi bấm nút chuyển trang */
+    .top-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--cyan-greeting), var(--knot-green), var(--title-cream));
+      z-index: 9999;
+      box-shadow: 0 0 12px var(--cyan-greeting);
+      transition: width 0.35s ease, opacity 0.3s ease;
+    }
+
+    /* =========================================================
+       2. HÌNH VẼ TOÁN HỌC TRÔI NỔI DƯỚI NỀN (BACKGROUND DOODLES)
+       ========================================================= */
+    .math-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .doodle {
+      position: absolute;
+      user-select: none;
+      transition: transform 0.3s ease-out;
+    }
+
+    /* Hoa thị góc trên trái */
+    .doodle-star {
+      top: 15%;
+      left: 9%;
+      width: 70px;
+      height: 70px;
+      opacity: 0.12;
+      animation: float-slow 9s ease-in-out infinite alternate;
+    }
+
+    /* Phương trình mờ góc phải trên: x7 + 7y = 141.7 */
+    .doodle-eq1 {
+      top: 23%;
+      right: 14%;
+      font-family: 'Jost', sans-serif;
+      font-size: 38px;
+      font-weight: 700;
+      color: #d97706;
+      opacity: 0.16;
+      filter: blur(2.5px);
+      transform: rotate(3deg);
+      animation: float-slow 11s ease-in-out infinite alternate-reverse;
+    }
+
+    /* Xoắn ốc Archimedes góc dưới trái */
+    .doodle-spiral {
+      bottom: 12%;
+      left: 1%;
+      width: 170px;
+      height: 170px;
+      opacity: 0.13;
+      filter: blur(1px);
+      animation: spin-gentle 30s linear infinite;
+    }
+
+    /* Biểu thức *(n-1) + x - 1 góc dưới giữa */
+    .doodle-eq2 {
+      bottom: 4%;
+      left: 44%;
+      font-size: 34px;
+      font-weight: 600;
+      color: #e5e7eb;
+      opacity: 0.12;
+      filter: blur(2.5px);
+      transform: rotate(-32deg);
+    }
+
+    /* Khối đa diện góc dưới phải */
+    .doodle-poly {
+      bottom: -3%;
+      right: 1%;
+      width: 220px;
+      height: 180px;
+      opacity: 0.12;
+    }
+
+    @keyframes float-slow {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-14px) rotate(4deg); }
+    }
+    @keyframes spin-gentle {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* =========================================================
+       3. THANH ĐIỀU HƯỚNG (NAVBAR) & HỘP TOOLTIP TỪNG NÚT
+       ========================================================= */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 78px;
+      padding: 0 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(24, 21, 20, 0.82);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-line);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 44px;
+    }
+
+    /* Cấu trúc chung cho các nút Icon trên Navbar */
+    .nav-btn {
+      position: relative;
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: background 0.25s ease, transform 0.2s ease;
+    }
+
+    /* HỘP TOOLTIP XUẤT HIỆN KHI ĐƯA CHUỘT LÊN ICON */
+    .tooltip-box {
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 50%;
+      transform: translateX(-50%) translateY(-6px) scale(0.94);
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 7px 13px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 500;
+      white-space: nowrap;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  visibility 0.22s;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Mũi tên nhỏ chỉ lên icon */
+    .tooltip-box::before {
+      content: "";
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent transparent var(--bg-elevated) transparent;
+    }
+
+    .kbd-tag {
+      background: #141210;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--cyan-greeting);
+    }
+
+    /* Kích hoạt hộp khi đưa chuột vào nút */
+    .nav-btn:hover .tooltip-box {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    /* Riêng nút cuối bên phải căn lề phải cho hộp không tràn màn hình */
+    .nav-btn.align-right .tooltip-box {
+      left: auto;
+      right: 0;
+      transform: translateY(-6px) scale(0.94);
+    }
+    .nav-btn.align-right .tooltip-box::before {
+      left: auto;
+      right: 14px;
+    }
+    .nav-btn.align-right:hover .tooltip-box {
+      transform: translateY(0) scale(1);
+    }
+
+    /* --- HIỆU ỨNG RIÊNG CHO TỪNG ICON TRÊN NAVBAR --- */
+
+    /* 1. Kính lúp: Phóng to & Xoay nảy đàn hồi */
+    .btn-search svg {
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), stroke 0.25s;
+    }
+    .btn-search:hover {
+      background: rgba(0, 229, 255, 0.08);
+    }
+    .btn-search:hover svg {
+      transform: scale(1.15) rotate(-12deg);
+      stroke: var(--cyan-greeting);
+    }
+    .btn-search:active {
+      transform: scale(0.9);
+    }
+
+    /* 2. Logo Trái tim bện trung tâm: Phát sáng Neon + Sóng xung kích khi bấm */
+    .center-logo {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 56px;
+      height: 56px;
+    }
+    .center-logo svg {
+      filter: drop-shadow(0 0 8px rgba(140, 233, 154, 0.45));
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+    }
+    .center-logo:hover svg {
+      transform: scale(1.12) translateY(-2px);
+      filter: drop-shadow(0 0 16px rgba(140, 233, 154, 0.85));
+    }
+    .center-logo::after {
+      content: "";
+      position: absolute;
+      inset: 2px;
+      border-radius: 50%;
+      border: 2px solid var(--knot-green);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .center-logo.is-redirecting::after {
+      animation: shockwave 0.55s ease-out forwards;
+    }
+    @keyframes shockwave {
+      0% { transform: scale(0.9); opacity: 1; }
+      100% { transform: scale(1.65); opacity: 0; }
+    }
+
+    /* 3. Icon Sổ tay con mắt: Nghiêng 3D + Nháy con mắt sáng */
+    .btn-notes svg {
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.2s;
+    }
+    .btn-notes .eye-pupil {
+      transition: transform 0.3s ease, fill 0.3s ease;
+      transform-origin: center;
+    }
+    .btn-notes:hover {
+      background: rgba(244, 240, 168, 0.08);
+    }
+    .btn-notes:hover svg {
+      transform: translateY(-3px) rotate(-4deg);
+      color: var(--title-cream);
+    }
+    /* Khi click chuyển trang: Sổ phóng vọt lên */
+    .btn-notes.is-redirecting svg {
+      transform: scale(1.25) translateY(-10px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    /* 4. Icon Cộng đồng (2 người): Tách lớp đàn hồi */
+    .btn-community svg {
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s;
+    }
+    .btn-community:hover {
+      background: rgba(188, 227, 255, 0.08);
+    }
+    .btn-community:hover svg {
+      transform: scale(1.14);
+      color: var(--title-blue);
+    }
+
+    /* 5. Avatar Mặt trăng: Vành đai xoay + Chấm trạng thái */
+    .avatar-orb {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #ffffff, #d6d3d1 60%, #78716c 100%);
+      position: relative;
+      box-shadow: inset -4px -4px 8px rgba(0,0,0,0.35);
+      transition: transform 0.3s ease;
+    }
+    .avatar-orb::before {
+      content: "";
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 1.5px dashed rgba(255, 255, 255, 0.35);
+      transition: transform 0.6s ease, border-color 0.3s ease, inset 0.3s ease;
+    }
+    .status-dot {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 10px;
+      height: 10px;
+      background: #10b981;
+      border: 2px solid var(--bg-chalkboard);
+      border-radius: 50%;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .btn-profile:hover .avatar-orb {
+      transform: scale(1.06);
+    }
+    .btn-profile:hover .avatar-orb::before {
+      transform: rotate(120deg);
+      border-color: var(--cyan-greeting);
+      inset: -7px;
+    }
+    .btn-profile:hover .status-dot {
+      transform: scale(1.3);
+    }
+
+    /* =========================================================
+       4. KHU VỰC NỘI DUNG CHÍNH (HERO & GREETING)
+       ========================================================= */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 68px 24px 100px;
+    }
+
+    /* Tiêu đề tên tác giả có hiệu ứng quét sáng */
+    .author-title-wrap {
+      text-align: center;
+      margin-bottom: 52px;
+    }
+
+    .author-title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      display: inline-block;
+      cursor: pointer;
+      background: linear-gradient(90deg, var(--title-blue) 0%, #d8f3dc 38%, var(--title-cream) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0.6s ease, transform 0.3s ease;
+    }
+
+    .author-title:hover {
+      background-position: right center;
+      transform: translateY(-2px);
+    }
+
+    /* Đường kẻ ngang mảnh dưới tên */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border-line);
+      margin-bottom: 36px;
+    }
+
+    /* Nhãn GREETING màu xanh Cyan nghiêng */
+    .section-tag {
+      font-size: 16px;
+      font-weight: 700;
+      font-style: italic;
+      color: var(--cyan-greeting);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Đoạn văn Greeting */
+    .greeting-text {
+      font-size: 19px;
+      line-height: 1.85;
+      color: var(--text-main);
+      font-weight: 400;
+      margin-bottom: 40px;
+    }
+
+    /* Hiệu ứng 1: Tô bút dạ quang (Marker Highlight) cho từ khóa trong bài */
+    .highlight-link {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0 4px;
+      margin: 0 -2px;
+      border-radius: 4px;
+      background-image: linear-gradient(120deg, rgba(0, 229, 255, 0.22) 0%, rgba(140, 233, 154, 0.22) 100%);
+      background-repeat: no-repeat;
+      background-size: 100% 24%;
+      background-position: 0 92%;
+      transition: background-size 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.2s;
+    }
+    .highlight-link:hover {
+      background-size: 100% 100%;
+      color: var(--title-cream);
+    }
+
+    /* Hiệu ứng 2: Chú thích học thuật [1] mở hộp Popover khi rê chuột */
+    .footnote-ref {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--cyan-greeting);
+      background: rgba(0, 229, 255, 0.12);
+      padding: 1px 6px;
+      border-radius: 5px;
+      margin-left: 2px;
+      cursor: pointer;
+      position: relative;
+      vertical-align: super;
+      line-height: 1.2;
+      transition: background 0.2s, color 0.2s;
+    }
+    .footnote-box {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%) translateY(8px) scale(0.95);
+      width: 270px;
+      padding: 12px 14px;
+      background: var(--bg-elevated);
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      border-radius: 10px;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.65);
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-main);
+      line-height: 1.5;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      z-index: 150;
+    }
+    .footnote-ref:hover {
+      background: var(--cyan-greeting);
+      color: #111;
+    }
+    .footnote-ref:hover .footnote-box {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    /* =========================================================
+       5. CỤM NÚT HÀNH ĐỘNG & THẺ BÀI VIẾT BỔ SUNG
+       ========================================================= */
+    .action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 52px;
+    }
+
+    /* Nút 1: Trượt lớp màu & Phóng mũi tên khi bấm */
+    .btn-explore {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--bg-chalkboard);
+      background: var(--title-cream);
+      border-radius: 10px;
+      text-decoration: none;
+      overflow: hidden;
+      z-index: 1;
+      transition: transform 0.2s ease, box-shadow 0.25s ease;
+    }
+    .btn-explore::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--cyan-greeting);
+      transform: translateX(-101%);
+      z-index: -1;
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .btn-explore .arrow {
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .btn-explore:hover {
+      box-shadow: 0 8px 20px rgba(0, 229, 255, 0.25);
+    }
+    .btn-explore:hover::after {
+      transform: translateX(0);
+    }
+    .btn-explore:hover .arrow {
+      transform: translateX(5px);
+    }
+    .btn-explore.is-redirecting .arrow {
+      transform: translateX(35px);
+      opacity: 0;
+    }
+
+    /* Nút 2: Phím bấm cơ học 3D (Mechanical Keycap) */
+    .btn-keycap {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 20px;
+      background: var(--bg-surface);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 10px;
+      color: var(--text-main);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      box-shadow: 0 4px 0 #0c0a09;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, border-color 0.2s;
+    }
+    .btn-keycap:hover {
+      border-color: var(--title-blue);
+      color: var(--title-blue);
+    }
+    .btn-keycap:active, .btn-keycap.is-redirecting {
+      transform: translateY(4px);
+      box-shadow: 0 0 0 #0c0a09;
+    }
+
+    /* Nút 3: Bật nhạc nền Lofi Equalizer */
+    .btn-audio {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-line);
+      border-radius: 24px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .eq-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 2.5px;
+      height: 13px;
+    }
+    .eq-bars span {
+      width: 2.5px;
+      height: 4px;
+      background: var(--knot-green);
+      border-radius: 2px;
+      transition: height 0.2s ease;
+    }
+    .btn-audio:hover, .btn-audio.playing {
+      border-color: var(--knot-green);
+      color: var(--text-main);
+      background: rgba(140, 233, 154, 0.08);
+    }
+    .btn-audio:hover .eq-bars span:nth-child(1),
+    .btn-audio.playing .eq-bars span:nth-child(1) {
+      animation: eq-bounce 0.55s infinite alternate;
+    }
+    .btn-audio:hover .eq-bars span:nth-child(2),
+    .btn-audio.playing .eq-bars span:nth-child(2) {
+      animation: eq-bounce 0.4s infinite alternate 0.15s;
+    }
+    .btn-audio:hover .eq-bars span:nth-child(3),
+    .btn-audio.playing .eq-bars span:nth-child(3) {
+      animation: eq-bounce 0.6s infinite alternate 0.3s;
+    }
+    @keyframes eq-bounce {
+      0% { height: 4px; }
+      100% { height: 13px; }
+    }
+
+    /* Khu vực Danh sách bài viết (Thẻ quét sáng & Đổi thời gian đọc) */
+    .notes-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .note-card {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-line);
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+      overflow: hidden;
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  border-color 0.25s ease,
+                  box-shadow 0.25s ease;
+    }
+
+    /* Tia sáng lướt qua thẻ khi hover */
+    .note-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+      transform: skewX(-20deg);
+      pointer-events: none;
+    }
+    .note-card:hover::before {
+      animation: card-shine 0.75s ease forwards;
+    }
+    @keyframes card-shine {
+      to { left: 140%; }
+    }
+
+    .note-info h3 {
+      font-size: 16.5px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      transition: color 0.2s;
+    }
+    .note-info p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    /* Cuộn thời gian đọc -> "Đọc ngay →" */
+    .note-meta-swap {
+      height: 22px;
+      overflow: hidden;
+      font-size: 13px;
+      text-align: right;
+      min-width: 95px;
+    }
+    .note-meta-track {
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .note-meta-track span {
+      height: 22px;
+      line-height: 22px;
+      color: var(--text-muted);
+    }
+    .note-meta-track .cta-read {
+      color: var(--cyan-greeting);
+      font-weight: 600;
+    }
+
+    .note-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 229, 255, 0.4);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+    }
+    .note-card:hover .note-info h3 {
+      color: var(--title-cream);
+    }
+    .note-card:hover .note-meta-track {
+      transform: translateY(-22px);
+    }
+    .note-card.is-redirecting {
+      transform: scale(0.98);
+      border-color: var(--knot-green);
+    }
+
+    /* Hộp thông báo góc dưới khi bấm chuyển trang */
+    .toast-notify {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--bg-elevated);
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      color: var(--text-main);
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
+      transform: translateY(130%);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      z-index: 9999;
+    }
+    .toast-notify.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 640px) {
+      .navbar { padding: 0 18px; }
+      .nav-right { gap: 18px; }
+      .author-title { font-size: 32px; }
+      .greeting-text { font-size: 17px; }
+      .btn-audio { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Thanh tiến trình chuyển trang -->
+  <div class="top-progress" id="topProgress"></div>
+
+  <!-- Toast phản hồi khi click nút bất kỳ -->
+  <div class="toast-notify" id="toastNotify">
+    <span>✨</span>
+    <span id="toastMsg">Đang điều hướng...</span>
+  </div>
+
+  <!-- =========================================================
+       HÌNH VẼ TOÁN HỌC MỜ TRÔI NỔI DƯỚI NỀN (NHƯ ẢNH GỐC)
+       ========================================================= -->
+  <div class="math-bg" id="mathBg">
+    <!-- Hoa thị góc trái trên -->
+    <svg class="doodle doodle-star" viewBox="0 0 100 100" stroke="#a855f7" stroke-width="3">
+      <line x1="50" y1="5" x2="50" y2="95" />
+      <line x1="5" y1="50" x2="95" y2="50" />
+      <line x1="18" y1="18" x2="82" y2="82" />
+      <line x1="82" y1="18" x2="18" y2="82" />
+    </svg>
+
+    <!-- Phương trình mờ góc phải trên -->
+    <div class="doodle doodle-eq1">x7+7y=141.7</div>
+
+    <!-- Đường xoắn ốc góc trái dưới -->
+    <svg class="doodle doodle-spiral" viewBox="0 0 200 200" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round">
+      <path d="M100,100 m0,0 a10,10 0 1,0 20,0 a20,20 0 1,0 -40,0 a30,30 0 1,0 60,0 a40,40 0 1,0 -80,0 a55,55 0 1,0 110,0" />
+    </svg>
+
+    <!-- Biểu thức góc dưới -->
+    <div class="doodle doodle-eq2">*(n-1) + x - 1</div>
+
+    <!-- Khối hình học góc phải dưới -->
+    <svg class="doodle doodle-poly" viewBox="0 0 200 160" fill="none" stroke="#ffffff" stroke-width="1.5">
+      <polygon points="40,20 180,50 150,150 10,130" />
+      <line x1="40" y1="20" x2="150" y2="150" />
+      <line x1="180" y1="50" x2="10" y2="130" />
+    </svg>
+  </div>
+
+  <!-- =========================================================
+       THANH ĐIỀU HƯỚNG (NAVBAR) KÈM HỘP TOOLTIP CHO TỪNG NÚT
+       ========================================================= -->
+  <header class="navbar">
+    <!-- 1. Nút Tìm kiếm (Trái) -->
+    <a href="#search-modal" class="nav-btn btn-search nav-trigger" data-label="Mở khung Tìm kiếm nhanh">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="20" y1="20" x2="16.2" y2="16.2"></line>
+      </svg>
+      <div class="tooltip-box">
+        Tìm kiếm <span class="kbd-tag">⌘K</span>
+      </div>
+    </a>
+
+    <!-- 2. Logo Trái tim bện xoắn (Giữa) -->
+    <a href="#home" class="nav-btn center-logo nav-trigger" data-label="Quay về Trang chủ">
+      <svg width="46" height="46" viewBox="0 0 64 64" fill="none">
+        <!-- Trái tim bện kết hợp xanh lá & vàng kem -->
+        <path d="M32 54 C14 42, 8 24, 18 15 C25 9, 32 16, 32 24 C32 32, 26 38, 32 46" stroke="#8ce99a" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M32 54 C50 42, 56 24, 46 15 C39 9, 32 16, 32 24 C32 32, 38 38, 32 46" stroke="#e9fac8" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M27 24 L37 30 M27 32 L37 38 M27 40 L37 46" stroke="#8ce99a" stroke-width="2.6" stroke-linecap="round"/>
+      </svg>
+      <div class="tooltip-box">Trang chủ</div>
+    </a>
+
+    <!-- Cụm 3 nút bên phải -->
+    <div class="nav-right">
+      <!-- 3. Icon Sổ tay con mắt -->
+      <a href="#articles" class="nav-btn btn-notes nav-trigger" data-label="Chuyển tới trang Ghi chú & Bài viết">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <rect x="4" y="3" width="14" height="18" rx="2"></rect>
+          <path d="M18 6h2v14a2 2 0 0 1-2 2H7"></path>
+          <path d="M7 12s2-3 4-3 4 3 4 3-2 3-4 3-4-3-4-3z"></path>
+          <circle class="eye-pupil" cx="11" cy="12" r="1.2" fill="currentColor"></circle>
+        </svg>
+        <div class="tooltip-box">Bài viết & Ghi chú</div>
+      </a>
+
+      <!-- 4. Icon Cộng đồng / Kết nối -->
+      <a href="#projects" class="nav-btn btn-community nav-trigger" data-label="Chuyển tới trang Dự án & Kết nối">
+        <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="9 4 12 7 9 10 6 7 9 4"></polygon>
+          <polygon points="15 4 18 7 15 10 12 7 15 4"></polygon>
+          <path d="M4 20v-4a4 4 0 0 1 4-4h2"></path>
+          <path d="M20 20v-4a4 4 0 0 0-4-4h-2"></path>
+          <path d="M12 12v8"></path>
+        </svg>
+        <div class="tooltip-box">Dự án & Nghiên cứu</div>
+      </a>
+
+      <!-- 5. Avatar Mặt trăng tròn -->
+      <a href="#about" class="nav-btn btn-profile align-right nav-trigger" data-label="Mở Hồ sơ cá nhân">
+        <div class="avatar-orb">
+          <span class="status-dot"></span>
+        </div>
+        <div class="tooltip-box">Hồ sơ tác giả</div>
+      </a>
+    </div>
+  </header>
+
+  <!-- =========================================================
+       NỘI DUNG CHÍNH (GREETING + TƯƠNG TÁC TRONG BÀI)
+       ========================================================= -->
+  <main class="main-container">
+    <!-- Tiêu đề chính -->
+    <div class="author-title-wrap">
+      <h1 class="author-title">Đặng Chí Khang</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Nhãn GREETING -->
+    <div class="section-tag">GREETING</div>
+
+    <!-- Đoạn văn giới thiệu có gắn Highlight Link & Footnote Popover -->
+    <p class="greeting-text">
+      Welcome to my blog. I am Dang Chi Khang, an undergraduate student at the 
+      <a href="#hcmus" class="highlight-link nav-trigger" data-label="Đang mở thông tin Khoa Toán - Tin (HCMUS)">University of Science, Ho Chi Minh City (HCMUS)</a>. 
+      I view mathematics not merely as an academic discipline, but as a foundational science essential for addressing complex human challenges. My primary interest lies in the elegance with which 
+      <a href="#frameworks" class="highlight-link nav-trigger" data-label="Xem chuyên đề Mô hình Toán học">mathematical frameworks</a><span class="footnote-ref">[1]<span class="footnote-box"><strong>[1] Ghi chú:</strong> Tập trung vào Giải tích thực, Giải tích điều hòa, Tổ hợp và Hình học chiếu.</span></span> 
+      can resolve both practical, real-world problems and highly abstract theoretical concepts<span class="footnote-ref">[2]<span class="footnote-box"><strong>[2] Định hướng:</strong> Xây dựng cầu nối trực quan giữa Đại số tuyến tính, Xác suất và Lý thuyết đồ thị.</span></span>.
+    </p>
+
+    <!-- Cụm nút hành động dưới phần giới thiệu -->
+    <div class="action-bar">
+      <a href="#explore-notes" class="btn-explore nav-trigger" data-label="Chuyển tới thư viện Bài viết">
+        <span>Khám phá bài viết</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a href="#cv-resume" class="btn-keycap nav-trigger" data-label="Đang mở Curriculum Vitae (PDF)">
+        <span>Hồ sơ học thuật</span>
+        <span class="kbd-tag">↵ CV</span>
+      </a>
+
+      <button type="button" class="btn-audio" id="audioToggle">
+        <div class="eq-bars">
+          <span></span><span></span><span></span>
+        </div>
+        <span id="audioText">Bật nhạc nền</span>
+      </button>
+    </div>
+
+    <!-- Danh sách ghi chú nổi bật (Thẻ tương tác chuột) -->
+    <div class="section-tag" style="font-size: 13px; margin-bottom: 16px;">SELECTED NOTES</div>
+
+    <div class="notes-grid">
+      <a href="#note-1" class="note-card nav-trigger" data-label="Đang mở bài viết: Giao thoa Tổ hợp & Giải tích">
+        <div class="note-info">
+          <h3>Giao thoa giữa Tổ hợp và Giải tích điều hòa</h3>
+          <p>Ghi chú về lý thuyết chiếu (Projection Theory) và hình học liên thuộc.</p>
+        </div>
+        <div class="note-meta-swap">
+          <div class="note-meta-track">
+            <span>8 phút đọc</span>
+            <span class="cta-read">Đọc bài →</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#note-2" class="note-card nav-trigger" data-label="Đang mở bài viết: Đại số tuyến tính trong Tổ hợp">
+        <div class="note-info">
+          <h3>Các bài toán Tổ hợp nhìn từ Đại số tuyến tính</h3>
+          <p>Ứng dụng không gian vector và giá trị riêng vào đếm cấu trúc đồ thị.</p>
+        </div>
+        <div class="note-meta-swap">
+          <div class="note-meta-track">
+            <span>6 phút đọc</span>
+            <span class="cta-read">Đọc bài →</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </main>
+
+  <!-- =========================================================
+       JAVASCRIPT XỬ LÝ HIỆU ỨNG CHUYỂN TRANG & PARALLAX NỀN
+       ========================================================= -->
+  <script>
+    // 1. Hiệu ứng bấm nút điều hướng (Chạy thanh tiến trình + Animation nút)
+    const triggers = document.querySelectorAll('.nav-trigger');
+    const progress = document.getElementById('topProgress');
+    const toast = document.getElementById('toastNotify');
+    const toastMsg = document.getElementById('toastMsg');
+    let redirectTimer;
+
+    triggers.forEach(item => {
+      item.addEventListener('click', function (e) {
+        e.preventDefault();
+        const label = this.getAttribute('data-label') || 'Đang mở trang đích...';
+
+        this.classList.add('is-redirecting');
+        progress.style.opacity = '1';
+        progress.style.width = '80%';
+
+        toastMsg.textContent = label;
+        toast.classList.add('show');
+
+        clearTimeout(redirectTimer);
+        redirectTimer = setTimeout(() => {
+          progress.style.width = '100%';
+          setTimeout(() => {
+            this.classList.remove('is-redirecting');
+            toast.classList.remove('show');
+            progress.style.opacity = '0';
+            setTimeout(() => { progress.style.width = '0%'; }, 300);
+          }, 400);
+        }, 450);
+      });
+    });
+
+    // 2. Nút bật/tắt Equalizer nhạc nền
+    const audioBtn = document.getElementById('audioToggle');
+    const audioText = document.getElementById('audioText');
+    audioBtn.addEventListener('click', () => {
+      audioBtn.classList.toggle('playing');
+      audioText.textContent = audioBtn.classList.contains('playing')
+        ? 'Đang phát: Lofi Violin'
+        : 'Bật nhạc nền';
+    });
+
+    // 3. Hiệu ứng Parallax nhẹ cho các công thức toán dưới nền khi di chuột
+    const doodles = document.querySelectorAll('.doodle');
+    window.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 16;
+      const y = (e.clientY / window.innerHeight - 0.5) * 16;
+      doodles.forEach((d, idx) => {
+        const factor = (idx + 1) * 0.4;
+        d.style.marginLeft = `${x * factor}px`;
+        d.style.marginTop = `${y * factor}px`;
+      });
+    });
+  </script>
+
+</body>
+</html>

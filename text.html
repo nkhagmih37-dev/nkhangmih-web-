@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>20 Mẫu Tương Tác Chuột Đẹp & Thông Dụng</title>
+  <style>
+    /* =========================================================
+       1. CẤU HÌNH GIAO DIỆN CHUNG & THEME MÀU TỐI HIỆN ĐẠI
+       ========================================================= */
+    :root {
+      --bg-body: #0b0f19;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+
+      /* Bảng màu bổ trợ */
+      --c-blue: #3b82f6;
+      --c-cyan: #06b6d4;
+      --c-emerald: #10b981;
+      --c-purple: #8b5cf6;
+      --c-pink: #ec4899;
+      --c-amber: #f59e0b;
+      --c-rose: #f43f5e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      padding: 48px 20px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      max-width: 650px;
+    }
+
+    header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+      background: linear-gradient(90deg, #60a5fa, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    header p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* Khung lưới hiển thị 20 mẫu */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      width: 100%;
+      max-width: 1280px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 24px 20px;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .badge {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* =========================================================
+       MẪU 01: MAGNETIC FLOATING (Thẻ nổi bồng bềnh)
+       ========================================================= */
+    .m1-float-card {
+      background: #1e293b;
+      padding: 18px 24px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      cursor: pointer;
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
+    }
+    .m1-float-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 30px -6px rgba(0, 0, 0, 0.5);
+    }
+
+    /* =========================================================
+       MẪU 02: GRADIENT BORDER TRACING (Viền Gradient động)
+       ========================================================= */
+    .m2-border-box {
+      position: relative;
+      padding: 16px 28px;
+      border-radius: 10px;
+      background: #111827;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .m2-border-box::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 12px;
+      background: linear-gradient(90deg, var(--c-cyan), var(--c-purple));
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .m2-border-box:hover::before {
+      opacity: 1;
+    }
+
+    /* =========================================================
+       MẪU 03: UNDERLINE REVEAL (Gạch chân chạy từ giữa)
+       ========================================================= */
+    .m3-link {
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 600;
+      position: relative;
+      padding-bottom: 6px;
+      cursor: pointer;
+    }
+    .m3-link::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 5%;
+      width: 0;
+      height: 2px;
+      background-color: var(--c-emerald);
+      transition: width 0.3s ease, left 0.3s ease;
+    }
+    .m3-link:hover::after {
+      width: 100%;
+      left: 0;
+    }
+
+    /* =========================================================
+       MẪU 04: RADIAL PULSE RING (Vòng sóng lan tỏa)
+       ========================================================= */
+    .m4-pulse-btn {
+      position: relative;
+      width: 52px;
+      height: 52px;
+      background-color: var(--c-rose);
+      border-radius: 50%;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .m4-pulse-btn::before {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid var(--c-rose);
+      opacity: 0;
+      transform: scale(0.9);
+      transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+    }
+    .m4-pulse-btn:hover::before {
+      opacity: 1;
+      transform: scale(1.35);
+    }
+
+    /* =========================================================
+       MẪU 05: ARROW SLIDE & EXPAND (Mũi tên phóng trượt)
+       ========================================================= */
+    .m5-arrow-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: #1f2937;
+      color: #fff;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .m5-arrow-btn span {
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .m5-arrow-btn:hover span {
+      transform: translateX(6px);
+    }
+
+    /* =========================================================
+       MẪU 06: NEON GLOW EXPANSION (Phát sáng Neon mờ ảo)
+       ========================================================= */
+    .m6-neon-btn {
+      padding: 12px 28px;
+      background: transparent;
+      color: var(--c-cyan);
+      border: 2px solid var(--c-cyan);
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .m6-neon-btn:hover {
+      background-color: var(--c-cyan);
+      color: #0b0f19;
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.6), 0 0 40px rgba(6, 182, 212, 0.2);
+    }
+
+    /* =========================================================
+       MẪU 07: 3D CARD TILT (Nghiêng phối cảnh 3D)
+       ========================================================= */
+    .m7-perspective-box {
+      perspective: 800px;
+    }
+    .m7-tilt-card {
+      background: #1e293b;
+      padding: 20px 30px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    .m7-perspective-box:hover .m7-tilt-card {
+      transform: rotateX(12deg) rotateY(-10deg) translateZ(10px);
+      box-shadow: -10px 15px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    /* =========================================================
+       MẪU 08: CIRCULAR SWEEP BUTTON (Vòng màu tỏa tròn)
+       ========================================================= */
+    .m8-sweep-btn {
+      position: relative;
+      padding: 12px 28px;
+      background: transparent;
+      color: var(--c-pink);
+      border: 2px solid var(--c-pink);
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      overflow: hidden;
+      z-index: 1;
+      transition: color 0.3s ease;
+    }
+    .m8-sweep-btn::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: var(--c-pink);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      transition: width 0.4s ease, height 0.4s ease;
+    }
+    .m8-sweep-btn:hover {
+      color: #ffffff;
+    }
+    .m8-sweep-btn:hover::after {
+      width: 250px;
+      height: 250px;
+    }
+
+    /* =========================================================
+       MẪU 09: ROTATING ICON TRIGGER (Xoay góc biểu tượng)
+       ========================================================= */
+    .m9-cog-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #f8fafc;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .m9-cog-btn .cog {
+      font-size: 18px;
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .m9-cog-btn:hover .cog {
+      transform: rotate(90deg);
+    }
+
+    /* =========================================================
+       MẪU 10: BOTTOM SHEET PREVIEW (Trượt panel từ đáy)
+       ========================================================= */
+    .m10-sheet-card {
+      position: relative;
+      width: 200px;
+      height: 120px;
+      background: #1f2937;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    .m10-sheet {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 8px;
+      background: var(--c-purple);
+      color: white;
+      font-size: 12px;
+      text-align: center;
+      transform: translateY(100%);
+      transition: transform 0.25s ease-out;
+    }
+    .m10-sheet-card:hover .m10-sheet {
+      transform: translateY(0);
+    }
+
+    /* =========================================================
+       MẪU 11: TEXT CHARACTER TRACKING (Dãn khoảng cách chữ)
+       ========================================================= */
+    .m11-tracking-btn {
+      padding: 12px 28px;
+      background: transparent;
+      color: var(--text-main);
+      border: 1px solid var(--text-muted);
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: letter-spacing 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+    .m11-tracking-btn:hover {
+      letter-spacing: 0.25em;
+      border-color: var(--c-blue);
+      color: var(--c-blue);
+    }
+
+    /* =========================================================
+       MẪU 12: GLASSMORPHISM FROST (Làm nhòe kính mờ)
+       ========================================================= */
+    .m12-glass-wrap {
+      position: relative;
+      width: 200px;
+      height: 110px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .m12-glass-pane {
+      position: absolute;
+      inset: 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(0px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      transition: backdrop-filter 0.3s ease, background 0.3s ease;
+    }
+    .m12-glass-wrap:hover .m12-glass-pane {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* =========================================================
+       MẪU 13: CORNER NOTCH EXPAND (Viền góc đối xứng vọt ra)
+       ========================================================= */
+    .m13-corner-box {
+      position: relative;
+      padding: 14px 28px;
+      color: var(--text-main);
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .m13-corner-box::before, .m13-corner-box::after {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-color: var(--c-emerald);
+      border-style: solid;
+      transition: all 0.3s ease;
+    }
+    .m13-corner-box::before {
+      top: 0; left: 0;
+      border-width: 2px 0 0 2px;
+    }
+    .m13-corner-box::after {
+      bottom: 0; right: 0;
+      border-width: 0 2px 2px 0;
+    }
+    .m13-corner-box:hover::before, .m13-corner-box:hover::after {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* =========================================================
+       MẪU 14: MECHANICAL TOGGLE SWITCH (Cần gạt cơ học)
+       ========================================================= */
+    .m14-switch {
+      width: 60px;
+      height: 32px;
+      background: #374151;
+      border-radius: 16px;
+      padding: 3px;
+      cursor: pointer;
+      transition: background 0.25s ease;
+      display: flex;
+      align-items: center;
+    }
+    .m14-knob {
+      width: 26px;
+      height: 26px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .m14-switch:hover {
+      background: #4b5563;
+    }
+    .m14-switch:hover .m14-knob {
+      transform: translateX(28px);
+      background: var(--c-emerald);
+    }
+
+    /* =========================================================
+       MẪU 15: BADGE BOUNCE NOTIFICATION (Rung chuông báo)
+       ========================================================= */
+    .m15-bell {
+      font-size: 32px;
+      cursor: pointer;
+      display: inline-block;
+      transform-origin: top center;
+    }
+    .m15-bell:hover {
+      animation: bell-ring 0.6s ease both;
+    }
+    @keyframes bell-ring {
+      20% { transform: rotate(15deg); }
+      40% { transform: rotate(-10deg); }
+      60% { transform: rotate(6deg); }
+      80% { transform: rotate(-3deg); }
+      100% { transform: rotate(0); }
+    }
+
+    /* =========================================================
+       MẪU 16: PILL TAB PILL FILL (Đổi màu viên thuốc)
+       ========================================================= */
+    .m16-tab {
+      padding: 8px 20px;
+      border-radius: 20px;
+      background: #1f2937;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .m16-tab:hover {
+      background: var(--c-blue);
+      color: #ffffff;
+      transform: scale(1.05);
+    }
+
+    /* =========================================================
+       MẪU 17: SPLIT TEXT LIFT (Chữ giật hai nửa)
+       ========================================================= */
+    .m17-split-btn {
+      position: relative;
+      padding: 12px 28px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: var(--c-cyan);
+      font-weight: 700;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .m17-text {
+      display: inline-block;
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .m17-split-btn:hover .m17-text {
+      transform: translateY(-3px);
+    }
+
+    /* =========================================================
+       MẪU 18: SOFT SINK EMBOSS (Lún âm mặt sàn Neumorphism)
+       ========================================================= */
+    .m18-sink-box {
+      width: 140px;
+      height: 60px;
+      border-radius: 10px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4), -2px -2px 6px rgba(255, 255, 255, 0.03);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .m18-sink-box:hover {
+      box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.6), inset -2px -2px 4px rgba(255, 255, 255, 0.05);
+      color: var(--c-emerald);
+    }
+
+    /* =========================================================
+       MẪU 19: OUTLINE DRAW (Vẽ khung hình chữ nhật)
+       ========================================================= */
+    .m19-draw-btn {
+      position: relative;
+      padding: 12px 28px;
+      background: transparent;
+      color: var(--c-amber);
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .m19-draw-btn svg {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      fill: transparent;
+    }
+    .m19-draw-btn rect {
+      stroke: var(--c-amber);
+      stroke-width: 2;
+      stroke-dasharray: 60 200;
+      stroke-dashoffset: -180;
+      transition: stroke-dasharray 0.5s ease, stroke-dashoffset 0.5s ease;
+    }
+    .m19-draw-btn:hover rect {
+      stroke-dasharray: 300 0;
+      stroke-dashoffset: 0;
+    }
+
+    /* =========================================================
+       MẪU 20: RADIAL BLUR TO FOCUS (Làm sắc nét ảnh)
+       ========================================================= */
+    .m20-focus-item {
+      position: relative;
+      width: 160px;
+      height: 90px;
+      border-radius: 8px;
+      background: linear-gradient(45deg, #3b82f6, #10b981);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      cursor: pointer;
+      filter: blur(2px) grayscale(60%);
+      transform: scale(0.96);
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+    .m20-focus-item:hover {
+      filter: blur(0px) grayscale(0%);
+      transform: scale(1.02);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Bộ Sưu Tập 20 Mouse-Interactions</h1>
+    <p>Rê chuột hoặc click vào từng khối để xem phản hồi chuyển động</p>
+  </header>
+
+  <div class="grid">
+    <!-- Mẫu 01 -->
+    <div class="card">
+      <span class="badge">01. Floating Lift</span>
+      <div class="m1-float-card">Nâng thẻ & đổ bóng</div>
+    </div>
+
+    <!-- Mẫu 02 -->
+    <div class="card">
+      <span class="badge">02. Gradient Border</span>
+      <div class="m2-border-box">Viền quang phổ sáng</div>
+    </div>
+
+    <!-- Mẫu 03 -->
+    <div class="card">
+      <span class="badge">03. Underline Expand</span>
+      <a class="m3-link">Gạch chân từ tâm</a>
+    </div>
+
+    <!-- Mẫu 04 -->
+    <div class="card">
+      <span class="badge">04. Pulse Ping</span>
+      <button class="m4-pulse-btn">⚡</button>
+    </div>
+
+    <!-- Mẫu 05 -->
+    <div class="card">
+      <span class="badge">05. Arrow Slide</span>
+      <button class="m5-arrow-btn">Tiếp tục <span>→</span></button>
+    </div>
+
+    <!-- Mẫu 06 -->
+    <div class="card">
+      <span class="badge">06. Neon Glow</span>
+      <button class="m6-neon-btn">KHỞI ĐỘNG</button>
+    </div>
+
+    <!-- Mẫu 07 -->
+    <div class="card">
+      <span class="badge">07. 3D Tilt</span>
+      <div class="m7-perspective-box">
+        <div class="m7-tilt-card">Nghiêng 3D</div>
+      </div>
+    </div>
+
+    <!-- Mẫu 08 -->
+    <div class="card">
+      <span class="badge">08. Circle Sweep</span>
+      <button class="m8-sweep-btn">Tràn tròn tâm</button>
+    </div>
+
+    <!-- Mẫu 09 -->
+    <div class="card">
+      <span class="badge">09. Icon Rotate</span>
+      <button class="m9-cog-btn"><span class="cog">⚙️</span> Cài đặt</button>
+    </div>
+
+    <!-- Mẫu 10 -->
+    <div class="card">
+      <span class="badge">10. Bottom Sheet</span>
+      <div class="m10-sheet-card">
+        Dự án
+        <div class="m10-sheet">Xem tổng quan</div>
+      </div>
+    </div>
+
+    <!-- Mẫu 11 -->
+    <div class="card">
+      <span class="badge">11. Letter Spacing</span>
+      <button class="m11-tracking-btn">Dãn dòng</button>
+    </div>
+
+    <!-- Mẫu 12 -->
+    <div class="card">
+      <span class="badge">12. Glass Blur</span>
+      <div class="m12-glass-wrap">
+        <div class="m12-glass-pane">Mặt kính mờ</div>
+      </div>
+    </div>
+
+    <!-- Mẫu 13 -->
+    <div class="card">
+      <span class="badge">13. Corner Notch</span>
+      <div class="m13-corner-box">Khung góc mở rộng</div>
+    </div>
+
+    <!-- Mẫu 14 -->
+    <div class="card">
+      <span class="badge">14. Auto Toggle</span>
+      <div class="m14-switch"><div class="m14-knob"></div></div>
+    </div>
+
+    <!-- Mẫu 15 -->
+    <div class="card">
+      <span class="badge">15. Bell Shake</span>
+      <div class="m15-bell">🔔</div>
+    </div>
+
+    <!-- Mẫu 16 -->
+    <div class="card">
+      <span class="badge">16. Pill Switch</span>
+      <div class="m16-tab">Khám phá thẻ</div>
+    </div>
+
+    <!-- Mẫu 17 -->
+    <div class="card">
+      <span class="badge">17. Text Elevator</span>
+      <button class="m17-split-btn"><span class="m17-text">Bay chữ</span></button>
+    </div>
+
+    <!-- Mẫu 18 -->
+    <div class="card">
+      <span class="badge">18. Inset Sink</span>
+      <div class="m18-sink-box">Lún phím âm</div>
+    </div>
+
+    <!-- Mẫu 19 -->
+    <div class="card">
+      <span class="badge">19. SVG Stroke Draw</span>
+      <button class="m19-draw-btn">
+        <svg><rect x="0" y="0" width="100%" height="100%" rx="6"></rect></svg>
+        Vẽ viền SVG
+      </button>
+    </div>
+
+    <!-- Mẫu 20 -->
+    <div class="card">
+      <span class="badge">20. Blur To Focus</span>
+      <div class="m20-focus-item">Sắc nét hóa</div>
+    </div>
+  </div>
+
+</body>
+</html>
